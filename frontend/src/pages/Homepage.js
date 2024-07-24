@@ -1,12 +1,15 @@
-// Homepage.js
 import React, { useState } from 'react';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import './Homepage.css';
+import UserPage from './UserPage';
+import RegistrationSuccess from './ResgistrationSucess'; // Adjusted based on actual filename
 
 export default function Homepage() {
   const [showFormLogin, setShowFormLogin] = useState(false);
   const [showFormRegister, setShowFormRegister] = useState(false);
+  const [showUserPage, setShowUserPage] = useState(false);
+  const [showRegistrationSuccess, setShowRegistrationSuccess] = useState(false);
 
   const [loginData, setLoginData] = useState({ username: '', userid: '', password: '' });
   const [registerData, setRegisterData] = useState({ username: '', password: '' });
@@ -33,17 +36,28 @@ export default function Homepage() {
   const handleLoginSubmit = (event) => {
     event.preventDefault();
     console.log('Login Data:', loginData);
+    setShowUserPage(true); // Show the user page after login
   };
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
     console.log('Register Data:', registerData);
+    setShowRegistrationSuccess(true); // Show the registration success page after registration
   };
 
   const handleGoBack = () => {
     setShowFormLogin(false);
     setShowFormRegister(false);
   };
+
+  if (showUserPage) {
+    return <UserPage username={loginData.username} userid={loginData.userid} />;
+  }
+
+  if (showRegistrationSuccess) {
+    return <RegistrationSuccess username={registerData.username} />;
+  }
+
   return (
     <div className="Homepage">
       <div className="container mt-5">
@@ -95,7 +109,6 @@ export default function Homepage() {
                     onInputChange={handleInputChange}
                     onSubmit={handleLoginSubmit}
                     goBack={handleGoBack}
-
                   />
                 )}
               </div>

@@ -40,7 +40,7 @@ export default function LoginForm(props) {
           required
         />
       </div>
-      <button type="submit" className="btn btn-primary w-75 mb-3">Login</button>
+      <button type="submit" className="btn btn-primary w-75 mb-3" >Login</button>
       <button type="button" className="btn btn-secondary w-75 mb-3" onClick={props.goBack}>Go Back to Initial page</button>
 
     </form>
