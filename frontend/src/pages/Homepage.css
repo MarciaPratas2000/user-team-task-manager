@@ -1,0 +1,95 @@
+/* src/Homepage.css */
+
+.Homepage {
+    background: linear-gradient(to bottom, #76BBE2, #f8ecf9); /* Gradient from sky blue to light pink */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full height for vertical centering */
+  }
+  
+  
+  
+  .card {
+    border: none;
+    border-radius: 20px; /* Softly rounded corners */
+    background: #ffffff; /* Clean white background for the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Gentle shadow for the card */
+    width: 100%; /* Full width of its container */
+    max-width: 700px; /* Limit maximum width */
+  }
+  
+  .card-body {
+    padding: 0 0.5rem; /* Adjust padding for better spacing */
+  }
+  
+  h1 {
+    color: #0E4B6D; /* Deep navy blue for the header */
+    font-size: 2.5rem; /* Larger font size for emphasis */
+    margin: 0.5rem 0; /* Space below the header */
+  }
+  
+  .btn-primary, .btn-secondary {
+    border-radius: 8px; /* Softly rounded corners */
+    font-size: 16px; /* Slightly larger font size */
+    font-weight: 600; /* Bold font for emphasis */
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition for hover effect */
+    border: 1px solid #44535c; /* Remove default border */
+  }
+  
+  .btn-primary {
+    background-color: #bad3e1; /* Soft sky blue */
+  }
+  
+  .btn-primary:hover {
+    background-color: #90c7f7; /* Slightly darker sky blue */
+  }
+  
+  .btn-secondary {
+    background-color: rgb(177, 215, 241); /* Light sky blue */
+  }
+  
+  .btn-secondary:hover {
+    background-color: #6ebada; /* Slightly darker light blue */
+  }
+  
+  .input-group {
+    margin-bottom: 1.5rem; /* Increased spacing for input groups */
+  }
+  
+  .input-group .form-control {
+    border-radius: 10px; /* Softly rounded corners for input fields */
+    border: 1px solid #ddd; /* Light border color */
+    padding: 10px; /* Padding inside input fields */
+  }
+  
+  .form-label {
+    font-weight: 500;
+    color: #0E4B6D; /* Deep navy blue for labels */
+  }
+  
+  .mb-3 {
+    margin-bottom: 1.5rem; /* Space below elements with mb-3 class */
+  }
+  
+  .app-description {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .list-group-item {
+    display: flex; /* Flexbox for alignment */
+    justify-content: center;
+    align-items: center; /* Center align items vertically */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Softly rounded corners */
+    color: #333; /* Dark text color for readability */
+    text-align: center;
+  }
+  
+  .icon {
+    font-size: 1.2rem; /* Adjust icon size */
+    margin-right: 0.5rem; /* Space between icon and text */
+  }
+  
