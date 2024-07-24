@@ -40,16 +40,13 @@ const personalTasksData = [
   { task: 'Learn new JavaScript framework', createdBy: 'Alice', userId: '0002', status: 'Complete', isChecked: false, isUrgent: false }
 ];
 
-
 const UserPage = ({ username, userid }) => {
-  const [tasks, setTasks] = useState(teamsData);
-  const [personalTasks, setPersonalTasks] = useState(
-personalTasksData  );
+  const [teams, setTeams] = useState(teamsData); // Initialize teams with sample data
+  const [personalTasks, setPersonalTasks] = useState(personalTasksData);
   const [showPersonalForm, setShowPersonalForm] = useState(false);
   const [showTeamForm, setShowTeamForm] = useState(false);
-  const [selectedTeam, setSelectedTeam] = useState(0);
+  const [selectedTeam, setSelectedTeam] = useState(null);
   const [isCreatingTeam, setIsCreatingTeam] = useState(false);
-
 
   const handleCheckboxChange = (teamIndex, taskIndex, isPersonal = false) => {
     if (isPersonal) {
@@ -57,9 +54,9 @@ personalTasksData  );
       updatedPersonalTasks[taskIndex].isChecked = !updatedPersonalTasks[taskIndex].isChecked;
       setPersonalTasks(updatedPersonalTasks);
     } else {
-      const updatedTasks = [...tasks];
-      updatedTasks[teamIndex].tasks[taskIndex].isChecked = !updatedTasks[teamIndex].tasks[taskIndex].isChecked;
-      setTasks(updatedTasks);
+      const updatedTeams = [...teams];
+      updatedTeams[teamIndex].tasks[taskIndex].isChecked = !updatedTeams[teamIndex].tasks[taskIndex].isChecked;
+      setTeams(updatedTeams);
     }
   };
 
@@ -75,13 +72,13 @@ personalTasksData  );
           setPersonalTasks(updatedPersonalTasks);
         }, 500);
       } else {
-        const updatedTasks = [...tasks];
-        updatedTasks[teamIndex].tasks[taskIndex].isEliminating = true;
-        setTasks(updatedTasks);
+        const updatedTeams = [...teams];
+        updatedTeams[teamIndex].tasks[taskIndex].isEliminating = true;
+        setTeams(updatedTeams);
 
         setTimeout(() => {
-          updatedTasks[teamIndex].tasks.splice(taskIndex, 1);
-          setTasks(updatedTasks);
+          updatedTeams[teamIndex].tasks.splice(taskIndex, 1);
+          setTeams(updatedTeams);
         }, 500);
       }
     } else {
@@ -90,9 +87,9 @@ personalTasksData  );
         updatedPersonalTasks[taskIndex].status = newStatus;
         setPersonalTasks(updatedPersonalTasks);
       } else {
-        const updatedTasks = [...tasks];
-        updatedTasks[teamIndex].tasks[taskIndex].status = newStatus;
-        setTasks(updatedTasks);
+        const updatedTeams = [...teams];
+        updatedTeams[teamIndex].tasks[taskIndex].status = newStatus;
+        setTeams(updatedTeams);
       }
     }
   };
@@ -103,23 +100,23 @@ personalTasksData  );
       updatedPersonalTasks[taskIndex].isUrgent = !updatedPersonalTasks[taskIndex].isUrgent;
       setPersonalTasks(updatedPersonalTasks);
     } else {
-      const updatedTasks = [...tasks];
-      updatedTasks[teamIndex].tasks[taskIndex].isUrgent = !updatedTasks[teamIndex].tasks[taskIndex].isUrgent;
-      setTasks(updatedTasks);
+      const updatedTeams = [...teams];
+      updatedTeams[teamIndex].tasks[taskIndex].isUrgent = !updatedTeams[teamIndex].tasks[taskIndex].isUrgent;
+      setTeams(updatedTeams);
     }
   };
 
   const handleAddTask = (newTask) => {
     if (selectedTeam !== null) {
       // Add the new task to the selected team
-      const updatedTasks = [...tasks];
-      updatedTasks[selectedTeam].tasks.push({
+      const updatedTeams = [...teams];
+      updatedTeams[selectedTeam].tasks.push({
         ...newTask,
         createdBy: username,
         userId: userid,
         isChecked: false
       });
-      setTasks(updatedTasks);
+      setTeams(updatedTeams);
       setShowTeamForm(false);
     } else {
       // Add to personal tasks
@@ -133,47 +130,47 @@ personalTasksData  );
     }
   };
 
-  const getTaskClassName = (task) => {
-    if (task.isUrgent) {
-      return 'urgent-task';
-    } else if (task.status === 'Help') {
-      return 'help-task';
-    }
-    return '';
-  };
-
-  const handleCreateTeam = (teamName, userIds) => {
+  const handleCreateTeam = (teamName, userIds, tasks) => {
     const newTeam = {
       teamName,
-      tasks: [], // Initialize with an empty task list or any default tasks
+      userIds,
+      tasks,
     };
-    setTasks([...tasks, newTeam]);
+    setTeams([...teams, newTeam]); // Add the new team to the list of teams
     setIsCreatingTeam(false); // Close the form after creating the team
   };
 
+  // Helper function to get the class name based on task status
+  const getTaskClassName = (task) => {
+    switch (task.status) {
+      case 'Doing':
+        return 'text-primary';
+      case 'Help':
+        return 'text-warning';
+      case 'Complete':
+        return 'text-success';
+      case 'Eliminate':
+        return 'text-danger';
+      default:
+        return '';
+    }
+  };
 
   return (
     <div className="container mt-5 user-page">
       <h1 className="text-center mb-4">Welcome, {username}!</h1>
       <p className="text-center mb-4">Your User ID: <strong>{userid}</strong></p>
-        {/* Button to open the team creation form */}
-        <div className="text-center mb-4">
-        <button
-          className="btn btn-primary"
-          onClick={() => setIsCreatingTeam(true)}
-        >
-          Create New Team
-        </button>
+
+      <div className="text-center mb-4">
+        <button onClick={() => setIsCreatingTeam(true)}>Create New Team</button>
+        {isCreatingTeam && (
+          <TeamCreationForm
+            onCreateTeam={handleCreateTeam}
+            onCancel={() => setIsCreatingTeam(false)}
+            existingUsers={[]} // Provide existing users if available
+          />
+        )}
       </div>
-
-      {/* Conditionally render the team creation form */}
-      {isCreatingTeam && (
-        <TeamCreationForm
-          onCreateTeam={handleCreateTeam}
-          onCancel={() => setIsCreatingTeam(false)}
-        />
-      )}
-
 
       <div className="row">
         <div className="col-12">
@@ -232,7 +229,7 @@ personalTasksData  );
 
         <div className="col-12">
           <h2 className="text-center mb-3">Team Tasks</h2>
-          {tasks.map((team, teamIndex) => (
+          {teams.map((team, teamIndex) => (
             <div key={teamIndex} className="mb-4">
               <h3 className="text-center mb-3">{team.teamName}</h3>
               <ul className="list-group mb-4">
