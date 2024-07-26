@@ -66,23 +66,28 @@ const UserPage = ({ username, userid }) => {
           .filter(task => !(task.status === 'Eliminate' && task.isChecked));
       });
     } else {
-      setTeams(prevTeams => {
-        // Update the status of the specific task and remove tasks if status is 'Eliminate' and isChecked is true
-        return prevTeams.map((team, index) =>
-          index === teamIndex
-            ? {
-                ...team,
-                tasks: team.tasks
-                  .map((task, tIndex) =>
-                    tIndex === taskIndex ? { ...task, status: newStatus } : task
-                  )
-                  .filter(task => !(task.status === 'Eliminate' && task.isChecked))
-              }
-            : team
-        );
-      });
+      const team = teams[teamIndex];
+      const task = team.tasks[taskIndex];
+      if (task.userId === userid || team.creatorId === userid) {
+        setTeams(prevTeams => {
+          // Update the status of the specific task and remove tasks if status is 'Eliminate' and isChecked is true
+          return prevTeams.map((team, index) =>
+            index === teamIndex
+              ? {
+                  ...team,
+                  tasks: team.tasks
+                    .map((task, tIndex) =>
+                      tIndex === taskIndex ? { ...task, status: newStatus } : task
+                    )
+                    .filter(task => !(task.status === 'Eliminate' && task.isChecked))
+                }
+              : team
+          );
+        });
+      }
     }
   };
+  
   
 
   const handleUrgencyToggle = (teamIndex, taskIndex, isPersonal = false) => {
