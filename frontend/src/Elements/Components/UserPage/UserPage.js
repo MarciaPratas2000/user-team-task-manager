@@ -55,33 +55,35 @@ const UserPage = ({ username, userid }) => {
       );
     }
   };
-
   const handleStatusChange = (teamIndex, taskIndex, newStatus, isPersonal = false) => {
     if (isPersonal) {
-      setPersonalTasks(prevTasks =>
-        prevTasks.map((task, index) =>
-          index === taskIndex ? { ...task, status: newStatus } : task
-        )
-      );
+      setPersonalTasks(prevTasks => {
+        // Create a new tasks array with updated status and remove tasks if status is 'Eliminate' and isChecked is true
+        return prevTasks
+          .map((task, index) =>
+            index === taskIndex ? { ...task, status: newStatus } : task
+          )
+          .filter(task => !(task.status === 'Eliminate' && task.isChecked));
+      });
     } else {
-      const team = teams[teamIndex];
-      const task = team.tasks[taskIndex];
-      if (task.userId === userid || team.creatorId === userid) {
-        setTeams(prevTeams =>
-          prevTeams.map((team, index) =>
-            index === teamIndex
-              ? {
-                  ...team,
-                  tasks: team.tasks.map((task, tIndex) =>
+      setTeams(prevTeams => {
+        // Update the status of the specific task and remove tasks if status is 'Eliminate' and isChecked is true
+        return prevTeams.map((team, index) =>
+          index === teamIndex
+            ? {
+                ...team,
+                tasks: team.tasks
+                  .map((task, tIndex) =>
                     tIndex === taskIndex ? { ...task, status: newStatus } : task
                   )
-                }
-              : team
-          )
+                  .filter(task => !(task.status === 'Eliminate' && task.isChecked))
+              }
+            : team
         );
-      }
+      });
     }
   };
+  
 
   const handleUrgencyToggle = (teamIndex, taskIndex, isPersonal = false) => {
     if (isPersonal) {

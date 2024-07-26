@@ -3,12 +3,25 @@ import TaskList from '../TaskList/TaskList';
 import AddTaskForm from '../AddTaskForm/AddTaskForm'; // Ensure correct path
 import './TeamSection.css';
 
-const TeamSection = ({ team, teamIndex, onCheckboxChange, onStatusChange, onUrgencyToggle, onAddTask }) => {
-  const [showTaskForm, setShowTaskForm] = useState(false);
+const TeamSection = ({
+  team,
+  teamIndex,
+  onCheckboxChange,
+  onStatusChange,
+  onUrgencyToggle,
+  onAddTask,
+  onDeleteTask,
+  onUpdateTask,
+  userid // Current user ID
+}) => {
+  const [showAddTaskForm, setShowAddTaskForm] = useState(false);
+  const isCreator = team.creatorId === userid;
 
-  const handleAddTask = (task) => {
-    onAddTask(task, teamIndex); // Use the provided handler to add task to the team
-    setShowTaskForm(false); // Hide the form after adding the task
+  const toggleAddTaskForm = () => setShowAddTaskForm(!showAddTaskForm);
+
+  const handleAddTask = (newTask) => {
+    onAddTask(newTask, teamIndex); // Pass the new task and team index
+    setShowAddTaskForm(false); // Hide the form after adding the task
   };
 
   return (
@@ -19,26 +32,33 @@ const TeamSection = ({ team, teamIndex, onCheckboxChange, onStatusChange, onUrge
         onCheckboxChange={(taskIndex) => onCheckboxChange(teamIndex, taskIndex)}
         onStatusChange={(taskIndex, newStatus) => onStatusChange(teamIndex, taskIndex, newStatus)}
         onUrgencyToggle={(taskIndex) => onUrgencyToggle(teamIndex, taskIndex)}
-        isPersonal={false}
+        onDeleteTask={(taskIndex) => {
+          const task = team.tasks[taskIndex];
+          if (task.userId === userid || isCreator) {
+            onDeleteTask(teamIndex, taskIndex);
+          }
+        }}
+        onUpdateTask={(taskIndex, updatedTask) => {
+          const task = team.tasks[taskIndex];
+          if (task.userId === userid || isCreator) {
+            onUpdateTask(teamIndex, taskIndex, updatedTask);
+          }
+        }}
       />
-      <div className="text-center mb-3">
+      <div className="text-center mb-4">
         <button
           className="btn btn-primary"
-          onClick={() => setShowTaskForm(!showTaskForm)}
+          onClick={toggleAddTaskForm}
         >
-          {showTaskForm ? 'Cancel' : 'Add Task'}
+          {showAddTaskForm ? 'Cancel' : 'Add Task to Team'}
         </button>
       </div>
-      {showTaskForm && (
-        <AddTaskForm
-          onAddTask={handleAddTask}
-          onCancel={() => setShowTaskForm(false)} // Hide form on cancel
-          teams={[]} // Teams data not needed here
-          selectedTeam={teamIndex} // Pass the current team index
-        />
+      {showAddTaskForm && (
+        <AddTaskForm onAddTask={handleAddTask} />
       )}
     </div>
   );
 };
 
 export default TeamSection;
+
