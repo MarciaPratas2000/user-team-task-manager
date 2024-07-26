@@ -1,0 +1,17 @@
+/* src/components/TaskItem/TaskItem.css */
+
+.help-task {
+  background-color: lightyellow; /* Light yellow for Help tasks */
+}
+
+.urgent-task {
+  background-color: lightcoral; /* Light coral for urgent tasks */
+}
+
+.completed-task-checked {
+  color: #6c757d; /* Muted color for completed tasks */
+}
+
+.eliminating-task {
+  opacity: 0.5; /* Dimmed appearance for eliminating tasks (if you use this class) */
+}

@@ -1,0 +1,49 @@
+/* src/InitialSettings/UserDashboard/UserDashboard.css */
+
+.user-dashboard {
+  background: #e9ecef; /* Light background color for dashboard */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ensure it covers the full height of the viewport */
+}
+
+.container {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for card effect */
+  padding: 2rem;
+  max-width: 1200px; /* Limit maximum width */
+  width: 100%; /* Full width */
+}
+
+.user-dashboard h1 {
+  font-size: 2rem;
+  color: #343a40; /* Dark color for the heading */
+  margin-bottom: 20px;
+}
+
+.user-dashboard p {
+  font-size: 1rem;
+  color: #495057; /* Medium color for text */
+  margin-bottom: 15px;
+}
+
+.user-dashboard button {
+  background-color: #007bff; /* Primary button color */
+  color: #ffffff; /* Text color for the button */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for button hover */
+}
+
+.user-dashboard button:hover {
+  background-color: #0056b3; /* Darker shade for button hover */
+}
+
+.text-center {
+  text-align: center;
+}

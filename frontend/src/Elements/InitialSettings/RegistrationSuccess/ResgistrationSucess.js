@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import UserPage from './UserPage';
-import './ResgistrationSucess.css'; // Ensure this CSS file exists for styling
-import './UserPage.css'; // Ensure this CSS file exists for styling
+import UserDashboard from '../UserDashboard/UserDashboard'; // Path to UserDashboard component
+import './ResgistrationSucess.css'; // CSS file for RegistrationSuccess
 
 const RegistrationSuccess = (props) => {
-  const [startNowClicked, setStartNowClicked] = useState(false); // State to control navigation
+  const [startNowClicked, setStartNowClicked] = useState(false);
 
   const handleStartNow = () => {
-    setStartNowClicked(true); // Set the state to true when the button is clicked
+    setStartNowClicked(true);
   };
 
   return (
@@ -21,7 +20,7 @@ const RegistrationSuccess = (props) => {
           {!startNowClicked ? (
             <button className="btn btn-primary" onClick={handleStartNow}>Start Now</button>
           ) : (
-            <UserPage username={props.username} userid="0001" />
+            <UserDashboard username={props.username} userid="0001" />
           )}
         </div>
       </div>

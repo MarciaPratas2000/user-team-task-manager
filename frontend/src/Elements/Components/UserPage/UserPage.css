@@ -1,0 +1,96 @@
+/* UserPage.css */
+.user-page {
+  background-color: #f5f6f8; /* Light grey background */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.text-center h1, .text-center p {
+  color: #333;
+}
+
+.btn-primary {
+  background-color: #007bff; /* Navy Blue */
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Darker Navy Blue */
+}
+
+.btn-secondary {
+  background-color: #6c757d; /* Greyish */
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268; /* Darker Greyish */
+}
+
+.row {
+  margin-top: 20px;
+}
+
+.card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: #0c335e; /* Navy Blue */
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.add-task-form,
+.team-creation-form {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-task-form .form-group label,
+.team-creation-form .form-group label {
+  color: #333;
+}
+
+.form-group input[type="text"],
+.form-group select {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+  border-color: #5383b7; /* Navy Blue */
+  box-shadow: none;
+}
+
+.btn-primary {
+  border-radius: 5px;
+}
+
+.btn-secondary {
+  border-radius: 5px;
+  margin: 5% 5% 0 0;
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .col-md-6 {
+    margin-bottom: 20px;
+  }
+}

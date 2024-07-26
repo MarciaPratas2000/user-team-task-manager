@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
-import './Homepage.css';
-import UserPage from './UserPage';
-import RegistrationSuccess from './ResgistrationSucess'; // Adjusted based on actual filename
+import LoginForm from './LoginForm'; // Ensure the path is correct
+import RegisterForm from './RegisterForm'; // Ensure the path is correct
+import './Homepage.css'; // Ensure the CSS path is correct
+import UserPage from '../../Components/UserPage/UserPage'; // Correct path
+import RegistrationSuccess from '../RegistrationSuccess/ResgistrationSucess'; // Correct path
+
 
 export default function Homepage() {
   const [showFormLogin, setShowFormLogin] = useState(false);
