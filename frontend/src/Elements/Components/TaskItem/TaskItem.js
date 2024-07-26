@@ -37,7 +37,7 @@ const TaskItem = ({ task, index, onCheckboxChange, onStatusChange, onUrgencyTogg
         <label className="form-check-label" htmlFor={`${isPersonal ? 'personal' : 'team'}Checkbox${index}`}>
           {task.task}
         </label>
-        {!isPersonal && <span className="text-muted ms-2">by {task.user}, ID: {task.userId}</span>}
+        {!isPersonal && <span className="text-muted ms-2">  {task.createdBy}, ID: {task.userId}</span>}
       </div>
       <div>
         <button
