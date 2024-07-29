@@ -12,7 +12,8 @@ const TeamSection = ({
   onAddTask,
   onDeleteTask,
   onUpdateTask,
-  userid // Current user ID
+  onDeleteTeam, // Ensure this is defined
+  userid
 }) => {
   const [showAddTaskForm, setShowAddTaskForm] = useState(false);
   const isCreator = team.creatorId === userid;
@@ -27,6 +28,14 @@ const TeamSection = ({
   return (
     <div className="team-section">
       <h3>{team.teamName}</h3>
+      {isCreator && (
+        <button
+          className="btn btn-danger mb-3"
+          onClick={() => onDeleteTeam(teamIndex)} // Handle team deletion
+        >
+          Delete Team
+        </button>
+      )}
       <TaskList
         tasks={team.tasks}
         onCheckboxChange={(taskIndex) => onCheckboxChange(teamIndex, taskIndex)}
@@ -61,4 +70,3 @@ const TeamSection = ({
 };
 
 export default TeamSection;
-

@@ -54,8 +54,8 @@ const TaskItem = ({ task, index, onCheckboxChange, onStatusChange, onUrgencyTogg
           value={task.status}
           onChange={(e) => onStatusChange(index, e.target.value, isPersonal)}
         >
-          <option value="In progress">Not yet!</option>
-          <option value="Doing">In Progress</option>
+          <option value="Not-yet">Not yet!</option>
+          <option value="In-progress">In Progress</option>
           <option value="Help">Help</option>
           <option value="Complete">Complete</option>
           <option value="Eliminate">Eliminate</option>

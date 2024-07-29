@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './UserPage.css';
-import AddTaskForm from '../AddTaskForm/AddTaskForm'; // Correct path
-import TeamCreationForm from '../TeamCreationForm/TeamCreationForm'; // Correct path
-import TeamSection from '../TeamSection/TeamSection'; // Correct path
-import PersonalSection from '../PersonalSection/PersonalSection'; // Correct path
+import TeamCreationForm from '../TeamCreationForm/TeamCreationForm'; // Ensure this path is correct
+import TeamSection from '../TeamSection/TeamSection'; // Ensure this path is correct
+import PersonalSection from '../PersonalSection/PersonalSection'; // Ensure this path is correct
 
+// Initial data
 const initialTeams = [
   {
     teamName: "Development",
     creatorId: "0002",
     tasks: [
-      { task: "Implement feature X", status: "Doing", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002" },
+      { task: "Implement feature X", status: "In-progress", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002" },
       { task: "Fix bug Y", status: "Help", isUrgent: true, isChecked: false, createdBy: "Bob", userId: "0003" }
     ]
   },
@@ -24,15 +25,20 @@ const initialTeams = [
 ];
 
 const initialPersonalTasks = [
-  { task: "Read React documentation", status: "Doing", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002" },
+  { task: "Read React documentation", status: "In-progress", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002" },
   { task: "Write blog post", status: "Help", isUrgent: true, isChecked: false, createdBy: "Alice", userId: "0002" }
 ];
 
-const UserPage = ({ username, userid }) => {
+const UserPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { username = '', userid = '' } = location.state || {}; // Access route state
+
   const [teams, setTeams] = useState(initialTeams);
   const [personalTasks, setPersonalTasks] = useState(initialPersonalTasks);
   const [isCreatingTeam, setIsCreatingTeam] = useState(false);
 
+  // Handle task checkbox changes
   const handleCheckboxChange = (teamIndex, taskIndex, isPersonal = false) => {
     if (isPersonal) {
       setPersonalTasks(prevTasks =>
@@ -55,23 +61,23 @@ const UserPage = ({ username, userid }) => {
       );
     }
   };
+
+  // Handle status changes for tasks
   const handleStatusChange = (teamIndex, taskIndex, newStatus, isPersonal = false) => {
     if (isPersonal) {
-      setPersonalTasks(prevTasks => {
-        // Create a new tasks array with updated status and remove tasks if status is 'Eliminate' and isChecked is true
-        return prevTasks
+      setPersonalTasks(prevTasks => 
+        prevTasks
           .map((task, index) =>
             index === taskIndex ? { ...task, status: newStatus } : task
           )
-          .filter(task => !(task.status === 'Eliminate' && task.isChecked));
-      });
+          .filter(task => !(task.status === 'Eliminate' && task.isChecked))
+      );
     } else {
       const team = teams[teamIndex];
       const task = team.tasks[taskIndex];
       if (task.userId === userid || team.creatorId === userid) {
-        setTeams(prevTeams => {
-          // Update the status of the specific task and remove tasks if status is 'Eliminate' and isChecked is true
-          return prevTeams.map((team, index) =>
+        setTeams(prevTeams =>
+          prevTeams.map((team, index) =>
             index === teamIndex
               ? {
                   ...team,
@@ -82,14 +88,13 @@ const UserPage = ({ username, userid }) => {
                     .filter(task => !(task.status === 'Eliminate' && task.isChecked))
                 }
               : team
-          );
-        });
+          )
+        );
       }
     }
   };
-  
-  
 
+  // Toggle urgency of tasks
   const handleUrgencyToggle = (teamIndex, taskIndex, isPersonal = false) => {
     if (isPersonal) {
       setPersonalTasks(prevTasks =>
@@ -117,6 +122,7 @@ const UserPage = ({ username, userid }) => {
     }
   };
 
+  // Add new tasks to either personal or team tasks
   const handleAddTask = (newTask, teamIndex = null) => {
     if (teamIndex !== null) {
       setTeams(prevTeams =>
@@ -134,6 +140,7 @@ const UserPage = ({ username, userid }) => {
     }
   };
 
+  // Create a new team
   const handleCreateTeam = (teamName, users) => {
     const newTeam = {
       teamName,
@@ -141,10 +148,10 @@ const UserPage = ({ username, userid }) => {
       tasks: users.flatMap(user =>
         user.tasks.map(task => ({
           task,
-          status: 'Doing',
+          status: 'not-yet',
           isUrgent: false,
           isChecked: false,
-          createdBy: username,
+          createdBy: user.userName,  // Use the user's name
           userId: user.userId
         }))
       ),
@@ -163,7 +170,7 @@ const UserPage = ({ username, userid }) => {
       <div className="row">
         <div className="col-md-6">
           <div className="card personal-section">
-            <div className="card-header ">Personal Tasks</div>
+            <div className="card-header">Personal Tasks</div>
             <div className="card-body">
               <PersonalSection
                 personalTasks={personalTasks}
@@ -210,6 +217,14 @@ const UserPage = ({ username, userid }) => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="d-flex justify-content-end mt-4">
+        <button
+          className="btn btn-secondary rounded"
+          onClick={() => navigate('/')}
+        >
+          Go Back
+        </button>
       </div>
     </div>
   );

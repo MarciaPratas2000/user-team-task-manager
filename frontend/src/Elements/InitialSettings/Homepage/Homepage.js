@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm'; // Ensure the path is correct
 import RegisterForm from './RegisterForm'; // Ensure the path is correct
 import './Homepage.css'; // Ensure the CSS path is correct
-import UserPage from '../../Components/UserPage/UserPage'; // Correct path
-import RegistrationSuccess from '../RegistrationSuccess/ResgistrationSucess'; // Correct path
-
 
 export default function Homepage() {
   const [showFormLogin, setShowFormLogin] = useState(false);
   const [showFormRegister, setShowFormRegister] = useState(false);
-  const [showUserPage, setShowUserPage] = useState(false);
-  const [showRegistrationSuccess, setShowRegistrationSuccess] = useState(false);
 
   const [loginData, setLoginData] = useState({ username: '', userid: '', password: '' });
   const [registerData, setRegisterData] = useState({ username: '', password: '' });
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleLoginClick = () => {
     setShowFormLogin(true);
@@ -37,27 +35,20 @@ export default function Homepage() {
   const handleLoginSubmit = (event) => {
     event.preventDefault();
     console.log('Login Data:', loginData);
-    setShowUserPage(true); // Show the user page after login
+    // Navigate to user page with login data
+    navigate('/user-dashboard', { state: { username: loginData.username, userid: loginData.userid } });
   };
 
-  const handleRegisterSubmit = (event) => {
-    event.preventDefault();
-    console.log('Register Data:', registerData);
-    setShowRegistrationSuccess(true); // Show the registration success page after registration
+  const handleRegisterSubmit = async (data) => {
+    console.log('Register Data:', data);
+    // Navigate to registration success page with username
+    navigate('/registration-success', { state: { username: data.username } });
   };
 
   const handleGoBack = () => {
     setShowFormLogin(false);
     setShowFormRegister(false);
   };
-
-  if (showUserPage) {
-    return <UserPage username={loginData.username} userid={loginData.userid} />;
-  }
-
-  if (showRegistrationSuccess) {
-    return <RegistrationSuccess username={registerData.username} />;
-  }
 
   return (
     <div className="Homepage">
