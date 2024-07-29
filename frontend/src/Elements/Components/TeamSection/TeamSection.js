@@ -18,6 +18,10 @@ const TeamSection = ({
   const [showAddTaskForm, setShowAddTaskForm] = useState(false);
   const isCreator = team.creatorId === userid;
 
+  console.log('Team Creator ID:', team.creatorId);
+  console.log('Current User ID:', userid);
+  console.log('Is Creator:', isCreator);
+  
   const toggleAddTaskForm = () => setShowAddTaskForm(!showAddTaskForm);
 
   const handleAddTask = (newTask) => {

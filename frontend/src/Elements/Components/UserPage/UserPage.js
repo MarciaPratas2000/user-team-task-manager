@@ -139,6 +139,32 @@ const UserPage = () => {
       setPersonalTasks(prevTasks => [...prevTasks, { ...newTask, createdBy: username, userId: userid }]);
     }
   };
+  const handleUpdateTask = (updatedTask, teamIndex = null, taskIndex, isPersonal = false) => {
+    if (isPersonal) {
+      setPersonalTasks(prevTasks =>
+        prevTasks.map((task, index) =>
+          index === taskIndex ? { ...task, ...updatedTask } : task
+        )
+      );
+    } else {
+      const team = teams[teamIndex];
+      const task = team.tasks[taskIndex];
+      if (task.userId === userid || team.creatorId === userid) {
+        setTeams(prevTeams =>
+          prevTeams.map((team, index) =>
+            index === teamIndex
+              ? {
+                  ...team,
+                  tasks: team.tasks.map((task, tIndex) =>
+                    tIndex === taskIndex ? { ...task, ...updatedTask } : task
+                  )
+                }
+              : team
+          )
+        );
+      }
+    }
+  };
 
   // Create a new team
   const handleCreateTeam = (teamName, users) => {
@@ -158,6 +184,10 @@ const UserPage = () => {
     };
     setTeams(prevTeams => [...prevTeams, newTeam]);
     setIsCreatingTeam(false);
+  };
+  // Delete a team
+  const handleDeleteTeam = (teamIndex) => {
+    setTeams(prevTeams => prevTeams.filter((_, index) => index !== teamIndex));
   };
 
   return (
@@ -205,14 +235,16 @@ const UserPage = () => {
             <div className="card-body">
               {teams.map((team, teamIndex) => (
                 <TeamSection
-                  key={teamIndex}
-                  team={team}
-                  teamIndex={teamIndex}
-                  onCheckboxChange={handleCheckboxChange}
-                  onStatusChange={handleStatusChange}
-                  onUrgencyToggle={handleUrgencyToggle}
-                  onAddTask={handleAddTask}
-                />
+                key={teamIndex}
+                team={team}
+                teamIndex={teamIndex}
+                onCheckboxChange={handleCheckboxChange}
+                onStatusChange={handleStatusChange}
+                onUrgencyToggle={handleUrgencyToggle}
+                onAddTask={handleAddTask}
+                onDeleteTeam={handleDeleteTeam}
+                userid={userid} // Pass userId to check if the current user is the creator
+              />
               ))}
             </div>
           </div>
