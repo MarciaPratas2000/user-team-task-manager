@@ -53,7 +53,7 @@ export default function Homepage() {
   return (
     <div className="Homepage">
       <div className="container mt-5">
-        <h1 className="text-center mb-4">Task Manager App</h1>
+        <h1 className="text-center mb-4">TaskMingle App</h1>
         <div className="row justify-content-center">
           <div className="col-12 col-md-8 col-lg-6">
             <div className="card mb-3">
@@ -63,7 +63,7 @@ export default function Homepage() {
                     <div>
                       <ul className="list-group app-description text-muted mb-4">
                         <li className="list-group-item">
-                          <span className="icon">✔️</span> Welcome to the Task Manager App!
+                          <span className="icon">✔️</span> Welcome to the best interactive task manager app!
                         </li>
                         <li className="list-group-item">
                           <span className="icon">🔧</span> Built with Node.js and React, it streamlines task management for both individuals and teams.

@@ -1,20 +1,31 @@
 import React from 'react';
-import TaskItem from '../TaskItem/TaskItem'; // Import the TaskItem component
-import './TaskList.css'; // Import the CSS file for styling
+import TaskItem from '../TaskItem/TaskItem'; // Ensure correct path
+import './TaskList.css';
 
-// TaskList Component
-const TaskList = ({ tasks, onCheckboxChange, onStatusChange, onUrgencyToggle, isPersonal }) => {
+const TaskList = ({
+  tasks,
+  teamIndex, // Ensure this is passed down
+  onCheckboxChange,
+  onStatusChange,
+  onUrgencyToggle,
+  onDeleteTask,
+  onUpdateTask,
+  isPersonal
+}) => {
   return (
-    <ul className="list-group mb-4">
+    <ul className="list-group">
       {tasks.map((task, index) => (
         <TaskItem
-          key={index} // Key should be unique, consider using a unique task ID if available
+          key={index}
           task={task}
           index={index}
+          teamIndex={teamIndex} // Pass teamIndex down here
           onCheckboxChange={onCheckboxChange}
           onStatusChange={onStatusChange}
           onUrgencyToggle={onUrgencyToggle}
           isPersonal={isPersonal}
+          onUpdateTask={onUpdateTask}
+          onDeleteTask={onDeleteTask}
         />
       ))}
     </ul>

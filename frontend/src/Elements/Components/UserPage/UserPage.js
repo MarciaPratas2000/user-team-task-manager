@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './UserPage.css';
-import TeamCreationForm from '../TeamCreationForm/TeamCreationForm'; // Ensure this path is correct
-import TeamSection from '../TeamSection/TeamSection'; // Ensure this path is correct
-import PersonalSection from '../PersonalSection/PersonalSection'; // Ensure this path is correct
+import TeamCreationForm from '../TeamCreationForm/TeamCreationForm';
+import TeamSection from '../TeamSection/TeamSection';
+import PersonalSection from '../PersonalSection/PersonalSection';
 
 // Initial data
 const initialTeams = [
@@ -23,7 +23,6 @@ const initialTeams = [
     ]
   }
 ];
-
 const initialPersonalTasks = [
   { task: "Read React documentation", status: "In-progress", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002" },
   { task: "Write blog post", status: "Help", isUrgent: true, isChecked: false, createdBy: "Alice", userId: "0002" }
@@ -32,8 +31,7 @@ const initialPersonalTasks = [
 const UserPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { username = '', userid = '' } = location.state || {}; // Access route state
-
+  const { username = '', userid = '' } = location.state || {};
   const [teams, setTeams] = useState(initialTeams);
   const [personalTasks, setPersonalTasks] = useState(initialPersonalTasks);
   const [isCreatingTeam, setIsCreatingTeam] = useState(false);
@@ -139,6 +137,8 @@ const UserPage = () => {
       setPersonalTasks(prevTasks => [...prevTasks, { ...newTask, createdBy: username, userId: userid }]);
     }
   };
+
+  // Update task in either personal or team tasks
   const handleUpdateTask = (updatedTask, teamIndex = null, taskIndex, isPersonal = false) => {
     if (isPersonal) {
       setPersonalTasks(prevTasks =>
@@ -174,10 +174,10 @@ const UserPage = () => {
       tasks: users.flatMap(user =>
         user.tasks.map(task => ({
           task,
-          status: 'not-yet',
+          status: 'Not-yet',
           isUrgent: false,
           isChecked: false,
-          createdBy: user.userName,  // Use the user's name
+          createdBy: user.userName,
           userId: user.userId
         }))
       ),
@@ -185,9 +185,13 @@ const UserPage = () => {
     setTeams(prevTeams => [...prevTeams, newTeam]);
     setIsCreatingTeam(false);
   };
-  // Delete a team
-  const handleDeleteTeam = (teamIndex) => {
+
+   // Delete a team
+   const handleDeleteTeam = (teamIndex) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this team?");
+  if (isConfirmed) {
     setTeams(prevTeams => prevTeams.filter((_, index) => index !== teamIndex));
+  }
   };
 
   return (
@@ -196,7 +200,6 @@ const UserPage = () => {
         <h1>Welcome, {username}!</h1>
         <p>Your User ID: <strong>{userid}</strong></p>
       </div>
-
       <div className="row">
         <div className="col-md-6">
           <div className="card personal-section">
@@ -212,7 +215,6 @@ const UserPage = () => {
             </div>
           </div>
         </div>
-
         <div className="col-md-6">
           <div className="card team-tasks">
             <div className="card-header">Team Tasks</div>
@@ -235,16 +237,16 @@ const UserPage = () => {
             <div className="card-body">
               {teams.map((team, teamIndex) => (
                 <TeamSection
-                key={teamIndex}
-                team={team}
-                teamIndex={teamIndex}
-                onCheckboxChange={handleCheckboxChange}
-                onStatusChange={handleStatusChange}
-                onUrgencyToggle={handleUrgencyToggle}
-                onAddTask={handleAddTask}
-                onDeleteTeam={handleDeleteTeam}
-                userid={userid} // Pass userId to check if the current user is the creator
-              />
+                  key={teamIndex}
+                  team={team}
+                  teamIndex={teamIndex}
+                  onCheckboxChange={handleCheckboxChange}
+                  onStatusChange={handleStatusChange}
+                  onUrgencyToggle={handleUrgencyToggle}
+                  onAddTask={handleAddTask}
+                  onDeleteTeam={handleDeleteTeam}
+                  userid={userid}
+                />
               ))}
             </div>
           </div>
