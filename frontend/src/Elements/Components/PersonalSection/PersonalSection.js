@@ -8,7 +8,9 @@ const PersonalSection = ({
   onCheckboxChange,
   onStatusChange,
   onUrgencyToggle,
-  onAddTask
+  onAddTask,
+  onUpdateTask,
+  userid,
 }) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
 
@@ -17,6 +19,7 @@ const PersonalSection = ({
     setShowTaskForm(false); // Hide the form after adding the task
   };
 
+  
   return (
     <div className="personal-section">
       <TaskList
@@ -24,6 +27,10 @@ const PersonalSection = ({
         onCheckboxChange={onCheckboxChange}
         onStatusChange={onStatusChange}
         onUrgencyToggle={onUrgencyToggle}
+        onUpdateTask={onUpdateTask} // Pass the function reference
+        userid={userid}
+        isPersonal={true}
+        isCreator={true}
       />
       <div className="text-center mb-3">
         <button

@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TaskItem.css';
 
-const TaskItem = ({ task, index, onCheckboxChange, onStatusChange, onUrgencyToggle, isPersonal }) => {
+const TaskItem = ({ userid, task, index, onCheckboxChange, onStatusChange, onUrgencyToggle, isPersonal, onUpdateTask, isCreator }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedTask, setUpdatedTask] = useState(task.task);
+
   const getTaskClassName = (task) => {
     let className = '';
 
@@ -20,6 +23,30 @@ const TaskItem = ({ task, index, onCheckboxChange, onStatusChange, onUrgencyTogg
     return className;
   };
 
+  const handleEdit = () => {
+    if (task.userId === userid || isCreator) {
+      setIsEditing(prev => !prev);
+
+      if (!isEditing) {
+        setUpdatedTask(task.task);
+      }
+    }
+  };
+
+  const handleSave = () => {
+    if (onUpdateTask) {
+      onUpdateTask(index, { task: updatedTask }, isPersonal);
+    } else {
+      console.error('onUpdateTask function is not provided');
+    }
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setUpdatedTask(task.task); // Reset editText to the original task text
+    setIsEditing(false);
+  };
+
   if (task.status === 'Eliminate' && task.isChecked) {
     return null; // Skip rendering for tasks that should be eliminated.
   }
@@ -32,17 +59,26 @@ const TaskItem = ({ task, index, onCheckboxChange, onStatusChange, onUrgencyTogg
           type="checkbox"
           id={`${isPersonal ? 'personal' : 'team'}Checkbox${index}`}
           checked={task.isChecked}
-          onChange={() => onCheckboxChange(index, isPersonal)}
+          onChange={() => onCheckboxChange && onCheckboxChange(index, isPersonal)}
         />
         <label className="form-check-label" htmlFor={`${isPersonal ? 'personal' : 'team'}Checkbox${index}`}>
-          {task.task}
+          {isEditing ? (
+            <input
+              type="text"
+              className="form-control"
+              value={updatedTask}
+              onChange={(e) => setUpdatedTask(e.target.value)}
+            />
+          ) : (
+            task.task
+          )}
         </label>
         {!isPersonal && <span className="text-muted ms-2">  {task.createdBy}, ID: {task.userId}</span>}
       </div>
       <div>
         <button
           className={`btn ${task.isUrgent ? 'btn-danger' : 'btn-outline-danger'} ms-2`}
-          onClick={() => onUrgencyToggle(index, isPersonal)}
+          onClick={() => onUrgencyToggle && onUrgencyToggle(index, isPersonal)}
           aria-label="Mark as urgent"
         >
           Urgent
@@ -52,7 +88,7 @@ const TaskItem = ({ task, index, onCheckboxChange, onStatusChange, onUrgencyTogg
         <select
           className="form-select ms-2"
           value={task.status}
-          onChange={(e) => onStatusChange(index, e.target.value, isPersonal)}
+          onChange={(e) => onStatusChange && onStatusChange(index, e.target.value, isPersonal)}
         >
           <option value="Not-yet">Not yet!</option>
           <option value="In-progress">In Progress</option>
@@ -60,6 +96,22 @@ const TaskItem = ({ task, index, onCheckboxChange, onStatusChange, onUrgencyTogg
           <option value="Complete">Complete</option>
           <option value="Eliminate">Eliminate</option>
         </select>
+      </div>
+      <div>
+            <button
+        className={`btn ${isEditing ? 'btn-primary' : 'btn-warning'} ms-2`}
+        onClick={isEditing ? handleSave : handleEdit}
+        disabled={!isCreator && userid !== task.userId}
+      >
+        {isEditing ? 'Save' : 'Edit'}
+      </button>
+
+        {isEditing && (
+          <button className="btn btn-secondary ms-2" onClick={handleCancel}>
+            Cancel
+          </button>
+        )}
+        
       </div>
     </li>
   );

@@ -63,12 +63,10 @@ const UserPage = () => {
   // Handle status changes for tasks
   const handleStatusChange = (teamIndex, taskIndex, newStatus, isPersonal = false) => {
     if (isPersonal) {
-      setPersonalTasks(prevTasks => 
-        prevTasks
-          .map((task, index) =>
-            index === taskIndex ? { ...task, status: newStatus } : task
-          )
-          .filter(task => !(task.status === 'Eliminate' && task.isChecked))
+      setPersonalTasks(prevTasks =>
+        prevTasks.map((task, index) =>
+          index === taskIndex ? { ...task, status: newStatus } : task
+        )
       );
     } else {
       const team = teams[teamIndex];
@@ -79,11 +77,9 @@ const UserPage = () => {
             index === teamIndex
               ? {
                   ...team,
-                  tasks: team.tasks
-                    .map((task, tIndex) =>
-                      tIndex === taskIndex ? { ...task, status: newStatus } : task
-                    )
-                    .filter(task => !(task.status === 'Eliminate' && task.isChecked))
+                  tasks: team.tasks.map((task, tIndex) =>
+                    tIndex === taskIndex ? { ...task, status: newStatus } : task
+                  )
                 }
               : team
           )
@@ -138,31 +134,37 @@ const UserPage = () => {
     }
   };
 
-  // Update task in either personal or team tasks
-  const handleUpdateTask = (updatedTask, teamIndex = null, taskIndex, isPersonal = false) => {
+  // Handle task updates
+  const handleUpdateTask = (taskIndex, teamIndex, updatedTask, isPersonal) => {
     if (isPersonal) {
+      if (taskIndex < 0 || taskIndex >= personalTasks.length) {
+        console.error('Personal task not found at index:', taskIndex);
+        return;
+      }
       setPersonalTasks(prevTasks =>
-        prevTasks.map((task, index) =>
-          index === taskIndex ? { ...task, ...updatedTask } : task
+        prevTasks.map((task, tIndex) =>
+          tIndex === taskIndex ? { ...task, ...updatedTask } : task
         )
       );
     } else {
-      const team = teams[teamIndex];
-      const task = team.tasks[taskIndex];
-      if (task.userId === userid || team.creatorId === userid) {
-        setTeams(prevTeams =>
-          prevTeams.map((team, index) =>
-            index === teamIndex
-              ? {
-                  ...team,
-                  tasks: team.tasks.map((task, tIndex) =>
-                    tIndex === taskIndex ? { ...task, ...updatedTask } : task
-                  )
-                }
-              : team
-          )
-        );
+      if (!Array.isArray(teams) || teamIndex < 0 || teamIndex >= teams.length) {
+        console.error('Teams or team index is invalid');
+        return;
       }
+      setTeams(prevTeams =>
+        prevTeams.map((team, tIndex) =>
+          tIndex === teamIndex
+            ? {
+                ...team,
+                tasks: team.tasks.map((tTask, tTaskIndex) =>
+                  tTaskIndex === taskIndex ? { ...tTask, ...updatedTask } : tTask
+                )
+              }
+            : team
+        )
+      );
+
+
     }
   };
 
@@ -186,12 +188,12 @@ const UserPage = () => {
     setIsCreatingTeam(false);
   };
 
-   // Delete a team
-   const handleDeleteTeam = (teamIndex) => {
+  // Delete a team
+  const handleDeleteTeam = (teamIndex) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this team?");
-  if (isConfirmed) {
-    setTeams(prevTeams => prevTeams.filter((_, index) => index !== teamIndex));
-  }
+    if (isConfirmed) {
+      setTeams(prevTeams => prevTeams.filter((_, index) => index !== teamIndex));
+    }
   };
 
   return (
@@ -211,6 +213,9 @@ const UserPage = () => {
                 onStatusChange={(taskIndex, newStatus) => handleStatusChange(null, taskIndex, newStatus, true)}
                 onUrgencyToggle={(taskIndex) => handleUrgencyToggle(null, taskIndex, true)}
                 onAddTask={handleAddTask}
+                onUpdateTask={(taskIndex, updatedTask) => handleUpdateTask(taskIndex, null, updatedTask, true)}
+                userid={userid}
+                isPersonal={true}
               />
             </div>
           </div>
@@ -237,17 +242,25 @@ const UserPage = () => {
             <div className="card-body">
               {teams.map((team, teamIndex) => (
                 <TeamSection
-                  key={teamIndex}
-                  team={team}
-                  teamIndex={teamIndex}
-                  onCheckboxChange={handleCheckboxChange}
-                  onStatusChange={handleStatusChange}
-                  onUrgencyToggle={handleUrgencyToggle}
-                  onAddTask={handleAddTask}
-                  onDeleteTeam={handleDeleteTeam}
-                  userid={userid}
+                    key={teamIndex}
+                    team={team}
+                    teamIndex={teamIndex}
+                    onCheckboxChange={handleCheckboxChange}
+                    onStatusChange={handleStatusChange}
+                    onUrgencyToggle={handleUrgencyToggle}
+                    onAddTask={handleAddTask}
+                    onUpdateTask={(taskIndex, updatedTask) => handleUpdateTask(taskIndex, teamIndex, updatedTask, false)}
+                    onDeleteTeam={handleDeleteTeam}
+                    userid={userid}
+                    isCreator={team.creatorId === userid} // Pass directly
+                    isPersonal={false}
+  
                 />
+                
               ))}
+              console.log('Current User ID:', userid);
+console.log('Task User ID:', task.userId);
+console.log('Is Creator:', isCreator);
             </div>
           </div>
         </div>

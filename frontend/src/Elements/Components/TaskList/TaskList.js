@@ -4,13 +4,14 @@ import './TaskList.css';
 
 const TaskList = ({
   tasks,
-  teamIndex, // Ensure this is passed down
   onCheckboxChange,
   onStatusChange,
   onUrgencyToggle,
   onDeleteTask,
   onUpdateTask,
-  isPersonal
+  isPersonal,
+  userid,
+  isCreator
 }) => {
   return (
     <ul className="list-group">
@@ -19,13 +20,14 @@ const TaskList = ({
           key={index}
           task={task}
           index={index}
-          teamIndex={teamIndex} // Pass teamIndex down here
           onCheckboxChange={onCheckboxChange}
           onStatusChange={onStatusChange}
           onUrgencyToggle={onUrgencyToggle}
           isPersonal={isPersonal}
           onUpdateTask={onUpdateTask}
           onDeleteTask={onDeleteTask}
+          userid={userid}
+          isCreator={isCreator}
         />
       ))}
     </ul>

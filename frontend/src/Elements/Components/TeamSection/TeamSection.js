@@ -15,15 +15,13 @@ const TeamSection = ({
   onDeleteTask,
   onUpdateTask,
   onDeleteTeam, // Ensure this is defined
-  userid
+  userid,
+  isCreator,
+  isPersonal
 }) => {
   const [showAddTaskForm, setShowAddTaskForm] = useState(false);
-  const isCreator = team.creatorId === userid;
+   isCreator = team.creatorId === userid;
 
-  console.log('Team Creator ID:', team.creatorId);
-  console.log('Current User ID:', userid);
-  console.log('Is Creator:', isCreator);
-  
   const toggleAddTaskForm = () => setShowAddTaskForm(!showAddTaskForm);
 
   const handleAddTask = (newTask) => {
@@ -34,17 +32,17 @@ const TeamSection = ({
   return (
     <div className="team-section">
       <div className='d-flex justify-content-between'>
-      <h3>{team.teamName}</h3>
-      {isCreator && (
-       <button
-       className="btn text-dark border rounded-circle mb-3 ps-3 pe-3 "
-       onClick={() => onDeleteTeam(teamIndex)}
-       aria-label="Delete Team" // Handle team deletion
-     >
-         <FontAwesomeIcon icon={faTrashAlt} size="lg" />
-     </button>
-      )}
-           </div>
+        <h3>{team.teamName}</h3>
+        {isCreator && (
+          <button
+            className="btn text-dark border rounded-circle mb-3 ps-3 pe-3"
+            onClick={() => onDeleteTeam(teamIndex)}
+            aria-label="Delete Team"
+          >
+            <FontAwesomeIcon icon={faTrashAlt} size="lg" />
+          </button>
+        )}
+      </div>
 
       <TaskList
         tasks={team.tasks}
@@ -60,9 +58,12 @@ const TeamSection = ({
         onUpdateTask={(taskIndex, updatedTask) => {
           const task = team.tasks[taskIndex];
           if (task.userId === userid || isCreator) {
-            onUpdateTask(teamIndex, taskIndex, updatedTask);
+            onUpdateTask(taskIndex,updatedTask);
           }
         }}
+        userid={userid}
+        isCreator={isCreator}
+        isPersonal={isPersonal}
       />
       <div className="text-center mb-4">
         <button
