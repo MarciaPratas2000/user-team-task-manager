@@ -1,0 +1,95 @@
+/* Base styles for the comment bubble container */
+.comment-bubble {
+  position: relative;
+}
+
+/* Styles for the button that opens the comment bubble */
+.comment-bubble-button {
+  background-color: #ced6df; /* Primary color for button */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Round shape */
+  padding: 12px; /* Increased padding for a better click area */
+  cursor: pointer;
+  font-size: 18px; /* Larger font size for better visibility */
+  margin: 10px;
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition effects */
+}
+
+/* Hover effect for the comment bubble button */
+.comment-bubble-button:hover {
+  background-color: #0056b3; /* Darker shade for hover effect */
+  transform: scale(1.1); /* Slightly enlarge the button on hover */
+}
+
+/* Styles for the comment bubble content */
+.comment-bubble-content {
+  position: absolute; /* Absolute positioning to control placement */
+  top: 120%; /* Adjusted to position below the button */
+  left: 0;
+  width: 270px; /* Slightly wider for better content fit */
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* More prominent shadow */
+  padding: 15px; /* Increased padding for better spacing */
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.3s ease-in-out; /* Smooth transition for opening/closing */
+}
+
+/* Styles for the textarea within the comment bubble */
+.comment-bubble-content textarea {
+  width: calc(100% - 20px); /* Full width minus padding */
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 14px;
+  resize: none; /* Prevent resizing */
+}
+
+/* Styles for the buttons within the comment bubble */
+.comment-bubble-content button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+/* Hover effect for buttons inside the comment bubble */
+.comment-bubble-content button:hover {
+  opacity: 0.8; /* Slightly transparent on hover */
+}
+
+/* Styles for the list of comments */
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Styles for individual comment items */
+.comment-item {
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+  display: flex;
+  justify-content: space-between; /* Space between comment text and delete button */
+  align-items: center;
+}
+
+/* Styles for the delete button on comments */
+.comment-item button {
+  background: none;
+  border: none;
+  color: #dc3545; /* Red color for delete button */
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.comment-item button:hover {
+  color: #c82333; /* Darker red color on hover */
+}

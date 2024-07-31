@@ -1,0 +1,50 @@
+
+/* Container for the user page */
+.user-page-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+/* Title for the user page */
+.user-page-container .title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Container for each user card */
+.user-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+/* Header of the user card */
+.user-card .card-header {
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+}
+
+/* User details inside the card */
+.user-card p {
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+/* List of tasks for each user */
+.user-card .tasks-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-card .tasks-list .task-item {
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.user-card .tasks-list .task-item:last-child {
+  border-bottom: none;
+}

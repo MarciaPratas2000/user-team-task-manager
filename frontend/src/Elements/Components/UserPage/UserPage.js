@@ -11,22 +11,24 @@ const initialTeams = [
     teamName: "Development",
     creatorId: "0002",
     tasks: [
-      { task: "Implement feature X", status: "In-progress", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002" },
-      { task: "Fix bug Y", status: "Help", isUrgent: true, isChecked: false, createdBy: "Bob", userId: "0003" }
+      { task: "Implement feature X", status: "In-progress", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002", comments: ['hi'] },
+      { task: "Fix bug Y", status: "Help", isUrgent: true, isChecked: false, createdBy: "Bob", userId: "0003", comments: [] }
     ]
   },
   {
     teamName: "Marketing",
     creatorId: "0004",
     tasks: [
-      { task: "Prepare campaign", status: "Complete", isUrgent: false, isChecked: true, createdBy: "Carol", userId: "0004" }
+      { task: "Prepare campaign", status: "Complete", isUrgent: false, isChecked: true, createdBy: "Carol", userId: "0004", comments: [] }
     ]
   }
 ];
+
 const initialPersonalTasks = [
-  { task: "Read React documentation", status: "In-progress", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002" },
-  { task: "Write blog post", status: "Help", isUrgent: true, isChecked: false, createdBy: "Alice", userId: "0002" }
+  { task: "Read React documentation", status: "In-progress", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002", comments: [] },
+  { task: "Write blog post", status: "Help", isUrgent: true, isChecked: false, createdBy: "Alice", userId: "0002", comments: [] }
 ];
+
 
 const UserPage = () => {
   const location = useLocation();
@@ -196,6 +198,29 @@ const UserPage = () => {
     }
   };
 
+  // Add this function to handle adding comments to tasks
+  const handleAddComment = (teamIndex, taskIndex, comment, isPersonal) => {
+    if (isPersonal) {
+      setPersonalTasks(prevTasks =>
+        prevTasks.map((task, index) =>
+          index === taskIndex ? { ...task, comments: [...(task.comments || []), comment] } : task
+        )
+      );
+    } else {
+      setTeams(prevTeams =>
+        prevTeams.map((team, tIndex) =>
+          tIndex === teamIndex
+            ? {
+                ...team,
+                tasks: team.tasks.map((task, tIndex) =>
+                  tIndex === taskIndex ? { ...task, comments: [...(task.comments || []), comment] } : task
+                )
+              }
+            : team
+        )
+      );
+    }
+  };
   return (
     <div className="container mt-5 user-page">
       <div className="text-center mb-4">
@@ -216,6 +241,8 @@ const UserPage = () => {
                 onUpdateTask={(taskIndex, updatedTask) => handleUpdateTask(taskIndex, null, updatedTask, true)}
                 userid={userid}
                 isPersonal={true}
+                onAddComment={handleAddComment}
+
               />
             </div>
           </div>
@@ -236,6 +263,8 @@ const UserPage = () => {
                 <TeamCreationForm
                   onCreateTeam={handleCreateTeam}
                   onCancel={() => setIsCreatingTeam(false)}
+                  onAddComment={handleAddComment}
+
                 />
               </div>
             )}
@@ -254,6 +283,7 @@ const UserPage = () => {
                     userid={userid}
                     isCreator={team.creatorId === userid} // Pass directly
                     isPersonal={false}
+                    onAddComment={handleAddComment}
   
                 />
                 

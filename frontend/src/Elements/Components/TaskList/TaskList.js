@@ -11,7 +11,9 @@ const TaskList = ({
   onUpdateTask,
   isPersonal,
   userid,
-  isCreator
+  isCreator,
+  onAddComment
+
 }) => {
   return (
     <ul className="list-group">
@@ -28,6 +30,7 @@ const TaskList = ({
           onDeleteTask={onDeleteTask}
           userid={userid}
           isCreator={isCreator}
+          onAddComment={onAddComment}
         />
       ))}
     </ul>

@@ -17,7 +17,9 @@ const TeamSection = ({
   onDeleteTeam, // Ensure this is defined
   userid,
   isCreator,
-  isPersonal
+  isPersonal,
+  onAddComment
+
 }) => {
   const [showAddTaskForm, setShowAddTaskForm] = useState(false);
    isCreator = team.creatorId === userid;
@@ -61,9 +63,17 @@ const TeamSection = ({
             onUpdateTask(taskIndex,updatedTask);
           }
         }}
+
+        onAddComment={(taskIndex, comment) => {
+          const task = team.tasks[taskIndex];
+          if (task.userId === userid || isCreator) {
+            onAddComment(teamIndex, taskIndex, comment);
+          }
+        }}
         userid={userid}
         isCreator={isCreator}
         isPersonal={isPersonal}
+
       />
       <div className="text-center mb-4">
         <button

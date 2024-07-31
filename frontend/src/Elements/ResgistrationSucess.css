@@ -1,0 +1,53 @@
+.registration-success {
+    background-color: #f8f9fa; /* Light background color for the page */
+    padding: 20px; /* Padding around the component */
+    border-radius: 8px; /* Rounded corners for the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  .registration-success .container {
+    max-width: 600px; /* Limit the width of the container */
+    margin: auto; /* Center the container horizontally */
+  }
+  
+  .registration-success h1 {
+    color: #28a745; /* Green color for the success message */
+    font-size: 2rem; /* Larger font size for the heading */
+    font-weight: 700; /* Bold font weight for the heading */
+  }
+  
+  .registration-success p {
+    color: #333; /* Dark gray text color */
+    font-size: 1.125rem; /* Slightly larger font size for paragraphs */
+    margin-bottom: 1rem; /* Space below paragraphs */
+  }
+  
+  .registration-success .btn-primary {
+    background-color: #007bff; /* Blue color for the button */
+    border: none; /* Remove border */
+    color: #fff; /* White text color */
+    font-size: 1rem; /* Font size for the button text */
+    padding: 10px 20px; /* Padding inside the button */
+    border-radius: 4px; /* Rounded corners for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+  }
+  
+  .registration-success .btn-primary:hover {
+    background-color: #0056b3; /* Darker blue color on hover */
+  }
+  
+  .registration-success .text-center {
+    text-align: center; /* Center-align text */
+  }
+  .registration-success {
+    background-color: #f8f9fa; /* Light background color for registration success */
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .registration-success .btn {
+    font-size: 16px;
+  }
+  
+  

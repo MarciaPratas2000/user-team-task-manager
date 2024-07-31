@@ -1,0 +1,31 @@
+/* Container for the team page */
+.team-page-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Title for the team page */
+  .team-page-container .title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* List of team tasks */
+  .team-page-container .tasks-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .team-page-container .tasks-list .task-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .team-page-container .tasks-list .task-item:hover {
+    background-color: #f0f0f0;
+  }
+  

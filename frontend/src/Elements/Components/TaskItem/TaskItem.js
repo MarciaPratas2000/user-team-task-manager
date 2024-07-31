@@ -1,7 +1,22 @@
 import React, { useState } from 'react';
+import CommentBubble from '../CommentBubble/CommentBubble';
 import './TaskItem.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt, faCheck, faTimes, } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
 
-const TaskItem = ({ userid, task, index, onCheckboxChange, onStatusChange, onUrgencyToggle, isPersonal, onUpdateTask, isCreator }) => {
+
+const TaskItem = ({
+  userid,
+  task,
+  index,
+  onCheckboxChange,
+  onStatusChange,
+  onUrgencyToggle,
+  isPersonal,
+  onUpdateTask,
+  isCreator,
+  onAddComment
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTask, setUpdatedTask] = useState(task.task);
 
@@ -25,7 +40,7 @@ const TaskItem = ({ userid, task, index, onCheckboxChange, onStatusChange, onUrg
 
   const handleEdit = () => {
     if (task.userId === userid || isCreator) {
-      setIsEditing(prev => !prev);
+      setIsEditing((prev) => !prev);
 
       if (!isEditing) {
         setUpdatedTask(task.task);
@@ -47,13 +62,26 @@ const TaskItem = ({ userid, task, index, onCheckboxChange, onStatusChange, onUrg
     setIsEditing(false);
   };
 
+  const handleAddComment = (comment) => {
+    if (onAddComment && comment.trim()) {
+      onAddComment(index, comment.trim(), isPersonal);
+    }
+  };
+
   if (task.status === 'Eliminate' && task.isChecked) {
     return null; // Skip rendering for tasks that should be eliminated.
   }
 
   return (
     <li className={`list-group-item d-flex justify-content-between align-items-center ${getTaskClassName(task)}`}>
-      <div className="d-flex flex-grow-1 align-items-center">
+      {(isCreator || userid === task.userId) && (
+    <CommentBubble
+      onSave={handleAddComment}
+      existingComments={task.comments || []}
+    />
+  )}
+      <div className="d-flex align-items-center">
+ 
         <input
           className="form-check-input me-1"
           type="checkbox"
@@ -73,7 +101,7 @@ const TaskItem = ({ userid, task, index, onCheckboxChange, onStatusChange, onUrg
             task.task
           )}
         </label>
-        {!isPersonal && <span className="text-muted ms-2">  {task.createdBy}, ID: {task.userId}</span>}
+        {!isPersonal && <span className="text-muted ms-2">{task.createdBy}, ID: {task.userId}</span>}
       </div>
       <div>
         <button
@@ -98,20 +126,20 @@ const TaskItem = ({ userid, task, index, onCheckboxChange, onStatusChange, onUrg
         </select>
       </div>
       <div>
-            <button
-        className={`btn ${isEditing ? 'btn-primary' : 'btn-warning'} ms-2`}
-        onClick={isEditing ? handleSave : handleEdit}
-        disabled={!isCreator && userid !== task.userId}
-      >
-        {isEditing ? 'Save' : 'Edit'}
-      </button>
-
+      <button
+          className={`btn ${isEditing ? 'border' : 'btn'} ms-2`} 
+          onClick={isEditing ? handleSave : handleEdit}
+          disabled={!isCreator && userid !== task.userId}
+          aria-label={isEditing ? 'Save task' : 'Edit task'}
+        >
+          <FontAwesomeIcon icon={isEditing ? faCheck : faPencilAlt} />
+        </button>
         {isEditing && (
-          <button className="btn btn-secondary ms-2" onClick={handleCancel}>
-            Cancel
+          <button className="btn border ms-2" onClick={handleCancel}>
+          <FontAwesomeIcon icon={faTimes} /> {/* Checkmark for Save */}
+
           </button>
         )}
-        
       </div>
     </li>
   );
