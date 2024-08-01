@@ -8,34 +8,33 @@ const CommentBubble = ({ onSave, existingComments, onRemove }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [comments, setComments] = useState(existingComments || []);
+  const [checkedComments, setCheckedComments] = useState(new Array((existingComments || []).length).fill(false));
 
-  // Update comments when existingComments prop changes
   useEffect(() => {
-    console.log('Existing comments updated:', existingComments);
     setComments(existingComments || []);
+    setCheckedComments(new Array((existingComments || []).length).fill(false));
   }, [existingComments]);
 
   const toggleBubble = () => {
-    console.log('Toggling bubble. Current state:', isOpen);
     setIsOpen(!isOpen);
   };
 
   const handleSave = () => {
     const trimmedComment = newComment.trim();
     if (trimmedComment) {
-      console.log('Saving new comment:', trimmedComment);
       setComments([...comments, trimmedComment]);
+      setCheckedComments([...checkedComments, false]); // Add a new unchecked item
       onSave(trimmedComment);
       setNewComment('');
-      setIsEditing(false); // Exit editing mode after saving
-    } else {
-      console.log('No comment entered or comment is just whitespace.');
+      setIsEditing(false);
     }
   };
 
   const handleRemove = (index) => {
     const updatedComments = comments.filter((_, i) => i !== index);
+    const updatedCheckedComments = checkedComments.filter((_, i) => i !== index);
     setComments(updatedComments);
+    setCheckedComments(updatedCheckedComments);
     if (onRemove) {
       onRemove(index);
     }
@@ -44,12 +43,18 @@ const CommentBubble = ({ onSave, existingComments, onRemove }) => {
   const toggleEdit = () => {
     setIsEditing(!isEditing);
     if (isEditing) {
-      setNewComment(''); // Clear the textarea when exiting edit mode
+      setNewComment('');
     }
   };
 
+  const handleCheckboxChange = (index) => {
+    const updatedCheckedComments = [...checkedComments];
+    updatedCheckedComments[index] = !updatedCheckedComments[index];
+    setCheckedComments(updatedCheckedComments);
+  };
+
   return (
-    <div className="comment-bubble">
+    <div className="comment-bubble mt-0 mb-4">
       <button
         className="comment-bubble-button"
         onClick={toggleBubble}
@@ -58,21 +63,28 @@ const CommentBubble = ({ onSave, existingComments, onRemove }) => {
         <FontAwesomeIcon icon={faCommentDots} />
       </button>
       {isOpen && (
-        <div className="comment-bubble-content ">
-            <button
-                onClick={toggleEdit}
-                className="btn btn-edit mt-2 d-block"
-                title="Edit Comment"
-              >
-                <FontAwesomeIcon icon={faEdit} />
-                Add Notes
-              </button>
+        <div className="comment-bubble-content">
+          <span className='my-notes'>Task Notes</span>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="comment-bubble-close-button btn  p-2 btn-cancel"
+            title="Close comment bubble"
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+          <button
+            onClick={toggleEdit}
+            className="btn btn-edit mt-2 d-block"
+            title="Add Comment"
+          >
+            <FontAwesomeIcon icon={faEdit} />
+            Add Notes
+          </button>
           {isEditing ? (
-            <div className="comment-edit-mode">
+            <div className="comment-edit-mode m-3">
               <textarea
                 value={newComment}
                 onChange={(e) => {
-                  console.log('Comment text changed:', e.target.value);
                   setNewComment(e.target.value);
                 }}
                 placeholder="Write a comment"
@@ -93,23 +105,27 @@ const CommentBubble = ({ onSave, existingComments, onRemove }) => {
               </button>
             </div>
           ) : (
-            <>
-              <ul className="comment-list">
-                {comments.map((comment, index) => (
-                  <li key={index} className="comment-item">
-                    {comment}
-                    <button
-                      onClick={() => handleRemove(index)}
-                      className="btn btn-outline-danger ms-2"
-                      title="Remove comment"
-                    >
-                      <FontAwesomeIcon icon={faTrashAlt} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            
-            </>
+            <ul className="comment-list ms-4">
+              {comments.map((comment, index) => (
+                <li key={index} className="comment-item ">
+                  <input
+                    type="checkbox"
+                    checked={checkedComments[index]}
+                    onChange={() => handleCheckboxChange(index)}
+                    className="comment-checkbox"
+                  />
+                  <span className='ms-2'
+                  >{comment}</span>
+                  <button
+                    onClick={() => handleRemove(index)}
+                    className="btn btn-outline-danger ms-2"
+                    title="Remove comment"
+                  >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       )}

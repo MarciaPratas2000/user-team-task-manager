@@ -1,11 +1,13 @@
 .comment-bubble {
   position: relative;
   display: inline-block;
+  width: 100%; /* Ensure the comment bubble takes the full width of its container */
+  opacity: 0.7;
 }
 
 .comment-bubble .comment-bubble-button {
   background-color: transparent;
-  color: 0056b3;
+  color: grey;
   border: none;
   border-radius: 15px;
   padding: 10px;
@@ -22,37 +24,54 @@
   position: relative;
   bottom: 100%;
   left: 0;
-  background-color: white;
-  border: 1px solid #ddd;
+  background-color: rgb(245, 245, 245);
   border-radius: 10px;
   padding: 10px;
-  width: 200px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  width: 100%; /* Full width */
+  z-index: 4;
+  
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+.comment-bubble
+.my-notes {
+  margin-left: 1.1rem; /* Adjust margin-left as needed (ms-4 equivalent) */
+  font-size: 1.25rem; /* Adjust font size as needed (fs-5 equivalent) */
+  color: #333; /* Change color if needed */
+  font-weight: bold; /* Optional: add bold font weight */
+}
+.comment-bubble .comment-bubble-close-button  {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #b3a9a9;
+  font-size: 16px;
 }
 
 .comment-bubble .comment-bubble-content textarea {
-  width: 100%;
+  width: calc(100% - 20px); /* Full width minus padding */
   border: none;
   resize: none;
   padding: 5px;
-  margin-top: 8px;
 }
-
 
 .comment-bubble .comment-list {
   list-style: none;
   padding: 0;
   margin: 10px 0 0 0;
+  text-align: right;
 }
 
 .comment-bubble .comment-item {
   border-bottom: 1px solid #ddd;
-  padding: 8px 0;
+  padding: 8px 2px;
   display: flex;
-  justify-content: space-between; /* Space between comment text and delete button */
-  align-items: center;
+  justify-content: flex-start; /* Align items to the right */
+  align-items: center; /* Center items vertically */
 }
+
 
 .comment-bubble .comment-item button {
   background: none;
@@ -67,9 +86,6 @@
   color: #c82333; /* Darker red color on hover */
 }
 
-
-
-/* Hide textarea and related buttons by default */
 .comment-bubble .comment-edit-mode textarea {
   width: calc(100% - 20px); /* Full width minus padding */
   box-sizing: border-box;
@@ -81,8 +97,6 @@
   resize: none; /* Prevent resizing */
 }
 
-/* Show textarea and buttons only when editing */
-.comment-bubble .comment-edit-mode .btn {
+.comment-bubble .comment-edit-mode .btn  {
   display: inline-block; /* Show buttons in edit mode */
 }
-

@@ -107,7 +107,7 @@ const TaskItem = ({
           disabled={!isCreator && userid !== task.userId}
           aria-label={isEditing ? 'Save task' : 'Edit task'}
         >
-          <FontAwesomeIcon icon={isEditing ? faCheck : faPencilAlt} />
+          <FontAwesomeIcon icon={isEditing ? faCheck : faPencilAlt} title='Edit Task' />
         </button>
         {isEditing && (
           <button className="btn btn-cancel " onClick={handleCancel}>
@@ -138,16 +138,15 @@ const TaskItem = ({
         >
           Urgent
         </button>
-        {(isCreator || userid === task.userId) && (
+      <div>
+      </div>
+    </li>
+    {(isCreator || userid === task.userId) && (
     <CommentBubble
       onSave={handleAddComment}
       existingComments={task.comments || []}
     />
   )}
-      <div>
- 
-      </div>
-    </li>
     </div>
   );
 };
