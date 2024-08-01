@@ -68,18 +68,13 @@ const TaskItem = ({
     }
   };
 
-  if (task.status === 'Eliminate' && task.isChecked) {
-    return null; // Skip rendering for tasks that should be eliminated.
-  }
+
+
+  
 
   return (
+    <div className='taskItem'>
     <li className={`list-group-item d-flex justify-content-between align-items-center ${getTaskClassName(task)}`}>
-      {(isCreator || userid === task.userId) && (
-    <CommentBubble
-      onSave={handleAddComment}
-      existingComments={task.comments || []}
-    />
-  )}
       <div className="d-flex align-items-center">
  
         <input
@@ -104,16 +99,25 @@ const TaskItem = ({
         {!isPersonal && <span className="text-muted ms-2">{task.createdBy}, ID: {task.userId}</span>}
       </div>
       <div>
-        <button
-          className={`btn ${task.isUrgent ? 'btn-danger' : 'btn-outline-danger'} ms-2`}
-          onClick={() => onUrgencyToggle && onUrgencyToggle(index, isPersonal)}
-          aria-label="Mark as urgent"
-        >
-          Urgent
-        </button>
+       
       </div>
+      <button
+          className={`btn ${isEditing ? 'btn-save' : 'btn-edit'} `} 
+          onClick={isEditing ? handleSave : handleEdit}
+          disabled={!isCreator && userid !== task.userId}
+          aria-label={isEditing ? 'Save task' : 'Edit task'}
+        >
+          <FontAwesomeIcon icon={isEditing ? faCheck : faPencilAlt} />
+        </button>
+        {isEditing && (
+          <button className="btn btn-cancel " onClick={handleCancel}>
+          <FontAwesomeIcon icon={faTimes} /> {/* Checkmark for Save */}
+
+          </button>
+        )}
       <div>
         <select
+          disabled={!isCreator && userid !== task.userId}
           className="form-select ms-2"
           value={task.status}
           onChange={(e) => onStatusChange && onStatusChange(index, e.target.value, isPersonal)}
@@ -122,26 +126,29 @@ const TaskItem = ({
           <option value="In-progress">In Progress</option>
           <option value="Help">Help</option>
           <option value="Complete">Complete</option>
-          <option value="Eliminate">Eliminate</option>
+          <option value="Eliminate">Delete</option>
         </select>
       </div>
-      <div>
       <button
-          className={`btn ${isEditing ? 'border' : 'btn'} ms-2`} 
-          onClick={isEditing ? handleSave : handleEdit}
+          className={`btn border ${task.isUrgent ? 'btn-danger' : 'btn-outline-danger'} m-3 p-2`}
           disabled={!isCreator && userid !== task.userId}
-          aria-label={isEditing ? 'Save task' : 'Edit task'}
-        >
-          <FontAwesomeIcon icon={isEditing ? faCheck : faPencilAlt} />
-        </button>
-        {isEditing && (
-          <button className="btn border ms-2" onClick={handleCancel}>
-          <FontAwesomeIcon icon={faTimes} /> {/* Checkmark for Save */}
 
-          </button>
-        )}
+          onClick={() => onUrgencyToggle && onUrgencyToggle(index, isPersonal)}
+          aria-label="Mark as urgent"
+        >
+          Urgent
+        </button>
+        {(isCreator || userid === task.userId) && (
+    <CommentBubble
+      onSave={handleAddComment}
+      existingComments={task.comments || []}
+    />
+  )}
+      <div>
+ 
       </div>
     </li>
+    </div>
   );
 };
 

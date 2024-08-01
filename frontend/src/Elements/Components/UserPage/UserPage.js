@@ -62,13 +62,21 @@ const UserPage = () => {
     }
   };
 
-  // Handle status changes for tasks
   const handleStatusChange = (teamIndex, taskIndex, newStatus, isPersonal = false) => {
+    if (newStatus === 'Eliminate') {
+      const isConfirmed = window.confirm('Are you sure you want to delete this task?');
+      if (!isConfirmed) {
+        return;
+      }
+    }
+  
     if (isPersonal) {
       setPersonalTasks(prevTasks =>
-        prevTasks.map((task, index) =>
-          index === taskIndex ? { ...task, status: newStatus } : task
-        )
+        newStatus === 'Eliminate'
+          ? prevTasks.filter((_, index) => index !== taskIndex)
+          : prevTasks.map((task, index) =>
+              index === taskIndex ? { ...task, status: newStatus } : task
+            )
       );
     } else {
       const team = teams[teamIndex];
@@ -79,9 +87,11 @@ const UserPage = () => {
             index === teamIndex
               ? {
                   ...team,
-                  tasks: team.tasks.map((task, tIndex) =>
-                    tIndex === taskIndex ? { ...task, status: newStatus } : task
-                  )
+                  tasks: newStatus === 'Eliminate'
+                    ? team.tasks.filter((_, tIndex) => tIndex !== taskIndex)
+                    : team.tasks.map((task, tIndex) =>
+                        tIndex === taskIndex ? { ...task, status: newStatus } : task
+                      )
                 }
               : team
           )
@@ -89,7 +99,8 @@ const UserPage = () => {
       }
     }
   };
-
+  
+  
   // Toggle urgency of tasks
   const handleUrgencyToggle = (teamIndex, taskIndex, isPersonal = false) => {
     if (isPersonal) {

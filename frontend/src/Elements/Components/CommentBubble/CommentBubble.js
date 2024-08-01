@@ -1,15 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
 import './CommentBubble.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faCheck, faTimes, faCommentDots } from '@fortawesome/free-solid-svg-icons'; // Import icons
+import { faTrashAlt, faCheck, faTimes, faCommentDots, faEdit } from '@fortawesome/free-solid-svg-icons'; // Import icons
 
 const CommentBubble = ({ onSave, existingComments, onRemove }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [comments, setComments] = useState(existingComments || []);
 
-  // Log whenever existingComments prop changes
+  // Update comments when existingComments prop changes
   useEffect(() => {
     console.log('Existing comments updated:', existingComments);
     setComments(existingComments || []);
@@ -27,7 +27,7 @@ const CommentBubble = ({ onSave, existingComments, onRemove }) => {
       setComments([...comments, trimmedComment]);
       onSave(trimmedComment);
       setNewComment('');
-      setIsOpen(false);
+      setIsEditing(false); // Exit editing mode after saving
     } else {
       console.log('No comment entered or comment is just whitespace.');
     }
@@ -41,6 +41,13 @@ const CommentBubble = ({ onSave, existingComments, onRemove }) => {
     }
   };
 
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+    if (isEditing) {
+      setNewComment(''); // Clear the textarea when exiting edit mode
+    }
+  };
+
   return (
     <div className="comment-bubble">
       <button
@@ -51,43 +58,59 @@ const CommentBubble = ({ onSave, existingComments, onRemove }) => {
         <FontAwesomeIcon icon={faCommentDots} />
       </button>
       {isOpen && (
-        <div className="comment-bubble-content d-block">
-          <textarea
-            value={newComment}
-            onChange={(e) => {
-              console.log('Comment text changed:', e.target.value);
-              setNewComment(e.target.value);
-            }}
-            placeholder="Write a comment"
-          />
-          <button
-            onClick={handleSave}
-            className="btn btn-success"
-            title="Save comment"
-          >
-            <FontAwesomeIcon icon={faCheck} /> {/* Checkmark for Save */}
-          </button>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="btn btn-danger"
-            title="Cancel"
-          >
-            <FontAwesomeIcon icon={faTimes} /> {/* Cross for Cancel */}
-          </button>
-          <ul className="comment-list">
-            {comments.map((comment, index) => (
-              <li key={index} className="comment-item">
-                {comment}
-                <button
-                  onClick={() => handleRemove(index)}
-                  className="btn btn-outline-danger ms-2"
-                  title="Remove comment"
-                >
-                  <FontAwesomeIcon icon={faTrashAlt} /> {/* Trash for Remove */}
-                </button>
-              </li>
-            ))}
-          </ul>
+        <div className="comment-bubble-content ">
+            <button
+                onClick={toggleEdit}
+                className="btn btn-edit mt-2 d-block"
+                title="Edit Comment"
+              >
+                <FontAwesomeIcon icon={faEdit} />
+                Add Notes
+              </button>
+          {isEditing ? (
+            <div className="comment-edit-mode">
+              <textarea
+                value={newComment}
+                onChange={(e) => {
+                  console.log('Comment text changed:', e.target.value);
+                  setNewComment(e.target.value);
+                }}
+                placeholder="Write a comment"
+              />
+              <button
+                onClick={handleSave}
+                className="btn btn-save"
+                title="Save comment"
+              >
+                <FontAwesomeIcon icon={faCheck} />
+              </button>
+              <button
+                onClick={() => setIsEditing(false)}
+                className="btn btn-cancel"
+                title="Cancel"
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </div>
+          ) : (
+            <>
+              <ul className="comment-list">
+                {comments.map((comment, index) => (
+                  <li key={index} className="comment-item">
+                    {comment}
+                    <button
+                      onClick={() => handleRemove(index)}
+                      className="btn btn-outline-danger ms-2"
+                      title="Remove comment"
+                    >
+                      <FontAwesomeIcon icon={faTrashAlt} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            
+            </>
+          )}
         </div>
       )}
     </div>
