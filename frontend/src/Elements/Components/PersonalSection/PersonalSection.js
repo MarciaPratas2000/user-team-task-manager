@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import AddTaskForm from '../AddTaskForm/AddTaskForm'; // Correct path
-import TaskList from '../TaskList/TaskList'; // Ensure correct path
-import './PersonalSection.css'; // Ensure you have a CSS file for custom styles
+import AddTaskForm from '../AddTaskForm/AddTaskForm'; // Ensure the path is correct
+import TaskList from '../TaskList/TaskList'; // Ensure the path is correct
+import './PersonalSection.css'; // Ensure this CSS file exists and is correctly styled
 
 const PersonalSection = ({
   personalTasks,
@@ -20,21 +20,21 @@ const PersonalSection = ({
     setShowTaskForm(false); // Hide the form after adding the task
   };
 
-  
   return (
+    //dropable has to be inside personal-section
     <div className="personal-section">
-      <TaskList
-        tasks={personalTasks}
-        onCheckboxChange={onCheckboxChange}
-        onStatusChange={onStatusChange}
-        onUrgencyToggle={onUrgencyToggle}
-        onUpdateTask={onUpdateTask} // Pass the function reference
-        userid={userid}
-        isPersonal={true}
-        isCreator={true}
-        onAddComment={onAddComment}
-
-      />
+            <TaskList
+              tasks={personalTasks}
+              onCheckboxChange={onCheckboxChange}
+              onStatusChange={onStatusChange}
+              onUrgencyToggle={onUrgencyToggle}
+              onUpdateTask={onUpdateTask} // Pass the function reference
+              userid={userid}
+              isPersonal={true}
+              isCreator={true}
+              onAddComment={onAddComment}
+            />
+      
       <div className="text-center mb-3">
         <button
           className="btn btn-primary"

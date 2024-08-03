@@ -4,29 +4,77 @@ import './UserPage.css';
 import TeamCreationForm from '../TeamCreationForm/TeamCreationForm';
 import TeamSection from '../TeamSection/TeamSection';
 import PersonalSection from '../PersonalSection/PersonalSection';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
-// Initial data
+
 const initialTeams = [
   {
+    id: 'team-1', // Unique identifier for the team
     teamName: "Development",
     creatorId: "0002",
     tasks: [
-      { task: "Implement feature X", status: "In-progress", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002", comments: ['hi'] },
-      { task: "Fix bug Y", status: "Help", isUrgent: true, isChecked: false, createdBy: "Bob", userId: "0003", comments: [] }
+      {
+        id: 'task-1', // Unique identifier for the task
+        task: "Implement feature X",
+        status: "In-progress",
+        isUrgent: false,
+        isChecked: false,
+        createdBy: "Alice",
+        userId: "0002",
+        comments: ['hi']
+      },
+      {
+        id: 'task-2', // Unique identifier for the task
+        task: "Fix bug Y",
+        status: "Help",
+        isUrgent: true,
+        isChecked: false,
+        createdBy: "Bob",
+        userId: "0003",
+        comments: []
+      }
     ]
   },
   {
+    id: 'team-2', // Unique identifier for the team
     teamName: "Marketing",
     creatorId: "0004",
     tasks: [
-      { task: "Prepare campaign", status: "Complete", isUrgent: false, isChecked: true, createdBy: "Carol", userId: "0004", comments: [] }
+      {
+        id: 'task-3', // Unique identifier for the task
+        task: "Prepare campaign",
+        status: "Complete",
+        isUrgent: false,
+        isChecked: true,
+        createdBy: "Carol",
+        userId: "0004",
+        comments: []
+      }
     ]
   }
 ];
 
 const initialPersonalTasks = [
-  { task: "Read React documentation", status: "In-progress", isUrgent: false, isChecked: false, createdBy: "Alice", userId: "0002", comments: [] },
-  { task: "Write blog post", status: "Help", isUrgent: true, isChecked: false, createdBy: "Alice", userId: "0002", comments: [] }
+  {
+    id: 'task-4', // Unique identifier for the task
+    task: "Read React documentation",
+    status: "In-progress",
+    isUrgent: false,
+    isChecked: false,
+    createdBy: "Alice",
+    userId: "0002",
+    comments: []
+  },
+  {
+    id: 'task-5', // Unique identifier for the task
+    task: "Write blog post",
+    status: "Help",
+    isUrgent: true,
+    isChecked: false,
+    createdBy: "Alice",
+    userId: "0002",
+    comments: []
+  }
 ];
 
 
@@ -231,81 +279,219 @@ const UserPage = () => {
         )
       );
     }
+  };const handleDragEnd = (result) => {
+    const { source, destination } = result;
+  
+    console.log('Drag result:', result);
+    console.log('Source droppableId:', source?.droppableId);
+    console.log('Destination droppableId:', destination?.droppableId);
+    console.log('DraggableId:', result.draggableId);
+    console.log('Source index:', source?.index);
+    console.log('Destination index:', destination?.index);
+  
+    // If no destination, exit the function
+    if (!destination) {
+      console.log('Drag ended with no valid destination');
+      return;
+    }
+  
+    // Determine if the source and destination are team tasks
+    const isSourceTeam = source.droppableId.startsWith('teamTasks-');
+    const isDestinationTeam = destination.droppableId.startsWith('teamTasks-');
+  
+    console.log('Is source team:', isSourceTeam);
+    console.log('Is destination team:', isDestinationTeam);
+  
+    // Extract team indices
+    const sourceTeamIndex = isSourceTeam
+      ? parseInt(source.droppableId.split('-')[1], 10)
+      : null;
+    const destinationTeamIndex = isDestinationTeam
+      ? parseInt(destination.droppableId.split('-')[1], 10)
+      : null;
+  
+    console.log('Source Team Index:', sourceTeamIndex);
+    console.log('Destination Team Index:', destinationTeamIndex);
+  
+    if (source.droppableId === destination.droppableId) {
+      if (source.droppableId === 'personalTasks') {
+        // Moving within personal tasks
+        const startIndex = source.index;
+        const endIndex = destination.index;
+  
+        const updatedPersonalTasks = [...personalTasks];
+        const [movedTask] = updatedPersonalTasks.splice(startIndex, 1);
+        updatedPersonalTasks.splice(endIndex, 0, movedTask);
+  
+        console.log('Updated personalTasks:', updatedPersonalTasks);
+        setPersonalTasks(updatedPersonalTasks);
+      } else if (isSourceTeam) {
+        // Moving within team tasks
+        const startIndex = source.index;
+        const endIndex = destination.index;
+  
+        const updatedTeams = [...teams];
+        const [movedTask] = updatedTeams[sourceTeamIndex].tasks.splice(startIndex, 1);
+        updatedTeams[sourceTeamIndex].tasks.splice(endIndex, 0, movedTask);
+  
+        console.log('Updated team tasks:', updatedTeams[sourceTeamIndex].tasks);
+        setTeams(updatedTeams);
+      }
+    } else {
+      if (isSourceTeam && destination.droppableId === 'personalTasks') {
+        // From team to personal
+        const taskIndex = source.index;
+  
+        const taskToMove = teams[sourceTeamIndex]?.tasks[taskIndex];
+        if (!taskToMove) {
+          console.error('Task to move is undefined');
+          return;
+        }
+  
+        // Check if the user is allowed to move the task
+        if (taskToMove.userId === userid || teams[sourceTeamIndex].creatorId === userid) {
+          const duplicatedTask = { ...taskToMove, id: `task-${Date.now()}` };
+  
+          const updatedTeams = [...teams];
+          updatedTeams[sourceTeamIndex].tasks = updatedTeams[sourceTeamIndex].tasks.filter((_, index) => index !== taskIndex);
+  
+          console.log('Updated team tasks:', updatedTeams[sourceTeamIndex].tasks);
+          console.log('Duplicated task:', duplicatedTask);
+  
+          setTeams(updatedTeams);
+          setPersonalTasks(prevTasks => [...prevTasks, duplicatedTask]);
+        } else {
+          console.error('You do not have permission to move this task');
+        }
+      } else if (source.droppableId === 'personalTasks' && isDestinationTeam) {
+        // From personal to team
+        const taskIndex = source.index;
+  
+        if (taskIndex >= personalTasks.length) {
+          console.error('Invalid personal task index:', taskIndex);
+          return;
+        }
+  
+        const taskToMove = personalTasks[taskIndex];
+        if (!taskToMove) {
+          console.error('Task to move is undefined');
+          return;
+        }
+  
+        // Check if the user is allowed to add the task to the team
+        if (teams[destinationTeamIndex]?.creatorId === userid) {
+          const duplicatedTask = { ...taskToMove, id: `task-${Date.now()}` };
+  
+          const updatedPersonalTasks = [...personalTasks];
+          updatedPersonalTasks.splice(taskIndex, 1);
+  
+          console.log('Updated personal tasks:', updatedPersonalTasks);
+          console.log('Duplicated task:', duplicatedTask);
+  
+          setPersonalTasks(updatedPersonalTasks);
+          setTeams(prevTeams => {
+            const newTeams = [...prevTeams];
+            newTeams[destinationTeamIndex].tasks.push(duplicatedTask);
+            console.log('Updated team tasks:', newTeams[destinationTeamIndex].tasks);
+            return newTeams;
+          });
+        } else {
+          console.error('You do not have permission to add tasks to this team');
+        }
+      }
+    }
   };
+  
+  
   return (
     <div className="container mt-5 user-page">
       <div className="text-center mb-4">
         <h1>Welcome, {username}!</h1>
-        <p>Your User ID: <strong>{userid}</strong></p>
+        <p>
+          Your User ID: <strong>{userid}</strong>
+        </p>
       </div>
-      <div className="row">
-        <div className="col-md-6">
-          <div className="card personal-section">
-            <div className="card-header">Personal Tasks</div>
-            <div className="card-body">
-              <PersonalSection
-                personalTasks={personalTasks}
-                onCheckboxChange={(taskIndex) => handleCheckboxChange(null, taskIndex, true)}
-                onStatusChange={(taskIndex, newStatus) => handleStatusChange(null, taskIndex, newStatus, true)}
-                onUrgencyToggle={(taskIndex) => handleUrgencyToggle(null, taskIndex, true)}
-                onAddTask={handleAddTask}
-                onUpdateTask={(taskIndex, updatedTask) => handleUpdateTask(taskIndex, null, updatedTask, true)}
-                userid={userid}
-                isPersonal={true}
-                onAddComment={handleAddComment}
-
-              />
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <div className="row">
+          <div className="col-md-6">
+            <div className="card personal-section">
+              <Droppable droppableId="personalTasks" type="TASK" direction='vertical' >
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="card-body"
+                  >
+                    <div className="card-header">Personal Tasks</div>
+                    <PersonalSection
+                      personalTasks={personalTasks}
+                      onCheckboxChange={(taskIndex) =>
+                        handleCheckboxChange(null, taskIndex, true)
+                      }
+                      onStatusChange={(taskIndex, newStatus) =>
+                        handleStatusChange(null, taskIndex, newStatus, true)
+                      }
+                      onUrgencyToggle={(taskIndex) =>
+                        handleUrgencyToggle(null, taskIndex, true)
+                      }
+                      onAddTask={handleAddTask}
+                      onUpdateTask={(taskIndex, updatedTask) =>
+                        handleUpdateTask(taskIndex, null, updatedTask, true)
+                      }
+                      userid={userid}
+                      isPersonal={true}
+                      onAddComment={handleAddComment}
+                    />
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
             </div>
           </div>
-        </div>
-        <div className="col-md-6">
-          <div className="card team-tasks">
-            <div className="card-header">Team Tasks</div>
-            <div className="d-flex justify-content-end mt-4 me-4">
-              <button
-                className="btn btn-secondary rounded"
-                onClick={() => setIsCreatingTeam(true)}
-              >
-                Create New Team
-              </button>
-            </div>
-            {isCreatingTeam && (
-              <div className="card team-creation-form">
-                <TeamCreationForm
-                  onCreateTeam={handleCreateTeam}
-                  onCancel={() => setIsCreatingTeam(false)}
-                  onAddComment={handleAddComment}
-
-                />
+          <div className="col-md-6">
+            <div className="card team-tasks">
+              <div className="card-header">Team Tasks</div>
+              <div className="d-flex justify-content-end mt-4 me-4">
+                <button
+                  className="btn btn-secondary rounded"
+                  onClick={() => setIsCreatingTeam(true)}
+                >
+                  Create New Team
+                </button>
               </div>
-            )}
-            <div className="card-body">
-              {teams.map((team, teamIndex) => (
-                <TeamSection
-                    key={teamIndex}
-                    team={team}
-                    teamIndex={teamIndex}
-                    onCheckboxChange={handleCheckboxChange}
-                    onStatusChange={handleStatusChange}
-                    onUrgencyToggle={handleUrgencyToggle}
-                    onAddTask={handleAddTask}
-                    onUpdateTask={(taskIndex, updatedTask) => handleUpdateTask(taskIndex, teamIndex, updatedTask, false)}
-                    onDeleteTeam={handleDeleteTeam}
-                    userid={userid}
-                    isCreator={team.creatorId === userid} // Pass directly
-                    isPersonal={false}
+              {isCreatingTeam && (
+                <div className="card team-creation-form">
+                  <TeamCreationForm
+                    onCreateTeam={handleCreateTeam}
+                    onCancel={() => setIsCreatingTeam(false)}
                     onAddComment={handleAddComment}
-  
-                />
-                
-              ))}
-              console.log('Current User ID:', userid);
-console.log('Task User ID:', task.userId);
-console.log('Is Creator:', isCreator);
+                  />
+                </div>
+              )}
+              <div className="card-body ">
+                {teams.map((team, teamIndex) => (
+                        <TeamSection
+                          team={team}
+                          teamIndex={teamIndex}
+                          onCheckboxChange={handleCheckboxChange}
+                          onStatusChange={handleStatusChange}
+                          onUrgencyToggle={handleUrgencyToggle}
+                          onAddTask={handleAddTask}
+                          onUpdateTask={(taskIndex, updatedTask) =>
+                            handleUpdateTask(taskIndex, teamIndex, updatedTask, false)
+                          }
+                          onDeleteTeam={handleDeleteTeam}
+                          userid={userid}
+                          isCreator={team.creatorId === userid}
+                          isPersonal={false}
+                          onAddComment={handleAddComment}
+                        />
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </DragDropContext>
       <div className="d-flex justify-content-end mt-4">
         <button
           className="btn btn-secondary rounded"
