@@ -4,7 +4,9 @@ import './UserPage.css';
 import TeamCreationForm from '../TeamCreationForm/TeamCreationForm';
 import TeamSection from '../TeamSection/TeamSection';
 import PersonalSection from '../PersonalSection/PersonalSection';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { v4 as uuidv4 } from 'uuid';
+
 
 
 const initialTeams = [
@@ -85,6 +87,8 @@ const UserPage = () => {
   const [teams, setTeams] = useState(initialTeams);
   const [personalTasks, setPersonalTasks] = useState(initialPersonalTasks);
   const [isCreatingTeam, setIsCreatingTeam] = useState(false);
+  const uniqueId = uuidv4();
+
 
   // Handle task checkbox changes
   const handleCheckboxChange = (teamIndex, taskIndex, isPersonal = false) => {
@@ -179,19 +183,26 @@ const UserPage = () => {
 
   // Add new tasks to either personal or team tasks
   const handleAddTask = (newTask, teamIndex = null) => {
+    // Create a unique ID using uuid
+  
+    // Add the unique ID to the new task
+    const taskWithId = { ...newTask, id: uniqueId, createdBy: username, userId: userid };
+  
     if (teamIndex !== null) {
+      // Add the task to a specific team
       setTeams(prevTeams =>
         prevTeams.map((team, index) =>
           index === teamIndex
             ? {
                 ...team,
-                tasks: [...team.tasks, { ...newTask, createdBy: username, userId: userid }]
+                tasks: [...team.tasks, taskWithId]
               }
             : team
         )
       );
     } else {
-      setPersonalTasks(prevTasks => [...prevTasks, { ...newTask, createdBy: username, userId: userid }]);
+      // Add the task to personal tasks
+      setPersonalTasks(prevTasks => [...prevTasks, taskWithId]);
     }
   };
 
@@ -241,7 +252,8 @@ const UserPage = () => {
           isUrgent: false,
           isChecked: false,
           createdBy: user.userName,
-          userId: user.userId
+          userId: user.userId,
+          id: uniqueId
         }))
       ),
     };
@@ -279,9 +291,12 @@ const UserPage = () => {
         )
       );
     }
-  };const handleDragEnd = (result) => {
-    const { source, destination } = result;
+  };
   
+  
+  const handleDragEnd = (result) => {
+    const { source, destination } = result;
+
     console.log('Drag result:', result);
     console.log('Source droppableId:', source?.droppableId);
     console.log('Destination droppableId:', destination?.droppableId);
@@ -350,7 +365,7 @@ const UserPage = () => {
   
         // Check if the user is allowed to move the task
         if (taskToMove.userId === userid || teams[sourceTeamIndex].creatorId === userid) {
-          const duplicatedTask = { ...taskToMove, id: `task-${Date.now()}` };
+          const duplicatedTask = { ...taskToMove, id: `task-${uniqueId}` };
   
           const updatedTeams = [...teams];
           updatedTeams[sourceTeamIndex].tasks = updatedTeams[sourceTeamIndex].tasks.filter((_, index) => index !== taskIndex);
@@ -380,7 +395,7 @@ const UserPage = () => {
   
         // Check if the user is allowed to add the task to the team
         if (teams[destinationTeamIndex]?.creatorId === userid) {
-          const duplicatedTask = { ...taskToMove, id: `task-${Date.now()}` };
+          const duplicatedTask = { ...taskToMove, id: `task-${uniqueId}` };
   
           const updatedPersonalTasks = [...personalTasks];
           updatedPersonalTasks.splice(taskIndex, 1);
