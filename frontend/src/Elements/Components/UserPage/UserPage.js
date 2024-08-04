@@ -33,28 +33,47 @@ const UserPage = () => {
   } = useTaskManagement(teamsTasks, personalTasks, userid, username);
 
 
-  // Create a new team
   const handleCreateTeam = (teamName, users) => {
+    // Debugging: Log the inputs to the function
+    console.log('Creating team with name:', teamName);
+    console.log('Users:', users);
+  
+    // Create the new team object
     const newTeam = {
-      id: createUniqueId(), // Ensure you have a unique ID
+      id: createUniqueId(), // Ensure you have a unique ID for the team
       name: teamName,
-      creatorId: userid,
-      tasks: users.map(user =>
-        user.tasks.map(task => ({
-          ...task,
-          status: 'Not-yet',
-          isUrgent: false,
-          isChecked: false,
-          createdBy: user.userName,
-          userId: user.userId,
-          id: createUniqueId(), // Ensure you have a unique ID for tasks
-        }))
-      ),
+      creatorId: userid, // Assuming `userid` is defined in the parent scope
+  
+      // Map through the users and their tasks to create the tasks array for the team
+      tasks: users.flatMap(user => { // Use flatMap to flatten the tasks array
+        console.log('Processing user:', user);
+        
+        return user.tasks.map(task => {
+          console.log('Processing task:', task);
+  
+          return {
+            id: createUniqueId(), // Unique ID for each task
+            title: task.title || '', // Ensure task.title exists
+            description: task.description || '', // Default empty description if not provided
+            status: 'Not-yet',
+            isUrgent: task.isUrgent || false, // Default to false if not specified
+            isChecked: task.isChecked || false, // Default to false if not specified
+            userName: user.userName,
+            userId: user.userId,
+            comments: task.comments || [] // Initialize with an empty comments array
+          };
+        });
+      }),
     };
-    handleAddTeam(newTeam);
-    setIsCreatingTeam(false);
+  
+    // Debugging: Log the new team object
+    console.log('New team object:', newTeam);
+  
+    handleAddTeam(newTeam); // Function to handle adding the new team
+    setIsCreatingTeam(false); // Close the team creation form
   };
-
+  
+  
   // Handle team deletion
   const handleDeleteTeamClick = (teamIndex) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this team?");

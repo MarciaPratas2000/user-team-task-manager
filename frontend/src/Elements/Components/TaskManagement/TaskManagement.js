@@ -72,7 +72,13 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
   };
 
   const handleAddTask = (newTask, teamIndex = null) => {
-    const taskWithId = { ...newTask, id: createUniqueId(), userName: username, userId: userid };
+    const taskWithId = {
+      ...newTask,
+      id: createUniqueId(),
+      userName: username,
+      userId: userid
+    };
+  
     if (teamIndex !== null) {
       setTeams((prevTeams) =>
         prevTeams.map((team, index) =>
@@ -83,6 +89,7 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
       setPersonalTasks((prevTasks) => [...prevTasks, taskWithId]);
     }
   };
+  
 
   const handleUpdateTask = (taskIndex, teamIndex, updatedTask, isPersonal) => {
     const updateTasks = (tasks) =>

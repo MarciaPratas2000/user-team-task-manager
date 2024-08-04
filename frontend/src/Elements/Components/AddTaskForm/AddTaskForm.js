@@ -9,7 +9,7 @@ const AddTaskForm = ({ onAddTask, onCancel, teams, selectedTeam }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newTask = {
-      task,
+      title: task,  // Ensure title is included
       status,
       isUrgent,
       isChecked: false,
