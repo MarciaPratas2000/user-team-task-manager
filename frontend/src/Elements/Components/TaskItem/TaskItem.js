@@ -2,22 +2,21 @@ import React, { useState } from 'react';
 import CommentBubble from '../CommentBubble/CommentBubble';
 import './TaskItem.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'; // Import the necessary icons
+import { faPencilAlt, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const TaskItem = ({
   userid,
   task,
   index,
-  onCheckboxChange,
   onStatusChange,
   onUrgencyToggle,
-  isPersonal,
   onUpdateTask,
+  onAddComment,
   isCreator,
-  onAddComment
+  isPersonal
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [updatedTask, setUpdatedTask] = useState(task.task);
+  const [updatedTask, setUpdatedTask] = useState(task.title);
 
   const getTaskClassName = (task) => {
     let className = '';
@@ -40,28 +39,32 @@ const TaskItem = ({
   const handleEdit = () => {
     if (task.userId === userid || isCreator) {
       setIsEditing(true);
-      setUpdatedTask(task.task);
+      setUpdatedTask(task.title);
     }
   };
 
   const handleSave = () => {
-    if (onUpdateTask) {
-      onUpdateTask(index, { task: updatedTask }, isPersonal);
-    } else {
-      console.error('onUpdateTask function is not provided');
-    }
+    onUpdateTask(index, { title: updatedTask });
     setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setUpdatedTask(task.task); // Reset the task text to the original
+    setUpdatedTask(task.title);
     setIsEditing(false);
   };
 
-  const handleAddComment = (comment) => {
-    if (onAddComment && comment.trim()) {
-      onAddComment(index, comment.trim(), isPersonal);
-    }
+  const handleCheckboxChange = () => {
+    onUpdateTask(index, { isChecked: !task.isChecked });
+  };
+
+  const handleUrgencyToggle = () => {
+    onUrgencyToggle(index);
+  };
+
+  // Example transformation function
+  const getPlaceholderText = (title) => {
+    // Example transformation: Capitalize the first letter of the title
+    return title.charAt(0).toUpperCase() + title.slice(1);
   };
 
   return (
@@ -71,23 +74,23 @@ const TaskItem = ({
           <input
             className="form-check-input me-1"
             type="checkbox"
-            id={`${isPersonal ? 'personal' : 'team'}Checkbox${index}`}
             checked={task.isChecked}
-            onChange={() => onCheckboxChange && onCheckboxChange(index, isPersonal)}
+            onChange={handleCheckboxChange}
           />
-          <label className="form-check-label" htmlFor={`${isPersonal ? 'personal' : 'team'}Checkbox${index}`}>
+          <label className="form-check-label">
             {isEditing ? (
               <input
                 type="text"
                 className="form-control"
                 value={updatedTask}
                 onChange={(e) => setUpdatedTask(e.target.value)}
+                placeholder={getPlaceholderText(task.title)} // Set placeholder with transformation
               />
             ) : (
-              task.task
+              task.title
             )}
           </label>
-          {!isPersonal && <span className="text-muted ms-2">{task.createdBy}, ID: {task.userId}</span>}
+          {!isPersonal && <span className="text-muted ms-2">{task.userName}, ID: {task.userId}</span>}
         </div>
 
         <div className="d-flex align-items-center">
@@ -115,7 +118,7 @@ const TaskItem = ({
             disabled={!isCreator && userid !== task.userId}
             className="form-select"
             value={task.status}
-            onChange={(e) => onStatusChange && onStatusChange(index, e.target.value, isPersonal)}
+            onChange={(e) => onStatusChange(index, e.target.value)}
           >
             <option value="Not-yet">Not yet!</option>
             <option value="In-progress">In Progress</option>
@@ -126,7 +129,7 @@ const TaskItem = ({
           <button
             className={`btn border ms-2 ${task.isUrgent ? 'btn-danger' : 'btn-outline-danger'} p-2`}
             disabled={!isCreator && userid !== task.userId}
-            onClick={() => onUrgencyToggle && onUrgencyToggle(index, isPersonal)}
+            onClick={handleUrgencyToggle}
             aria-label="Mark as urgent"
           >
             Urgent
@@ -136,7 +139,7 @@ const TaskItem = ({
 
       {(isCreator || userid === task.userId) && (
         <CommentBubble
-          onSave={handleAddComment}
+          onSave={(comment) => onAddComment(index, comment)}
           existingComments={task.comments || []}
         />
       )}

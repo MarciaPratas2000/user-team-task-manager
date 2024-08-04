@@ -40,7 +40,7 @@ const TeamSection = ({
 
           >
           <div className='d-flex justify-content-between'>
-            <h3>{team.teamName}</h3>
+            <h3>{team.name}</h3>
             {isCreator && (
               <button
                 className="btn text-dark border rounded-circle mb-3 ps-3 pe-3"

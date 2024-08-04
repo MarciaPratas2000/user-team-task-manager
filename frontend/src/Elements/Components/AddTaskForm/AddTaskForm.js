@@ -14,7 +14,7 @@ const AddTaskForm = ({ onAddTask, onCancel, teams, selectedTeam }) => {
       isUrgent,
       isChecked: false,
       isEliminating: false,
-      createdBy: "", // Will be set in UserPage
+      userName: "", // Will be set in UserPage
       userId: "" // Will be set in UserPage
     };
     onAddTask(newTask, selectedTeam);
@@ -40,7 +40,7 @@ const AddTaskForm = ({ onAddTask, onCancel, teams, selectedTeam }) => {
           onChange={(e) => setStatus(e.target.value)}
         >
           <option value="Todo">Not yet!</option>
-          <option value="Doing">In Progress</option>
+          <option value="In-progress">In Progress</option>
           <option value="Help">Help</option>
           <option value="Complete">Complete</option>
           <option value="Complete">Eliminate</option>

@@ -64,7 +64,7 @@ const CommentBubble = ({ onSave, existingComments, onRemove }) => {
       </button>
       {isOpen && (
         <div className="comment-bubble-content">
-          <span className='my-notes'>Task Notes</span>
+          <span className='my-notes'>My Notes</span>
           <button
             onClick={() => setIsOpen(false)}
             className="comment-bubble-close-button btn  p-2 btn-cancel"
