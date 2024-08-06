@@ -31,6 +31,9 @@ const TeamSection = ({
     setShowAddTaskForm(false); // Hide the form after adding the task
   };
 
+
+
+
   return (
     <div className="team-section">
     <Droppable droppableId={`teamTasks-${teamIndex.toString()}`} type="TASK" direction='vertical'  >
@@ -95,7 +98,10 @@ const TeamSection = ({
             </button>
           </div>
           {showAddTaskForm && (
-            <AddTaskForm onAddTask={handleAddTask} />
+             <AddTaskForm
+            onAddTask={handleAddTask}
+            isCreator={isCreator}
+           />
           )}
         </div>
       )}

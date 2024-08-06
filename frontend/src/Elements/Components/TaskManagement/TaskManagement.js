@@ -72,20 +72,24 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
   };
 
   const handleAddTask = (newTask, teamIndex = null) => {
+    // Create a task with a unique ID and additional user details if available
     const taskWithId = {
       ...newTask,
       id: createUniqueId(),
-      userName: username,
-      userId: userid
+      userName: newTask.userName || null, // Use userName from newTask or fallback to current username
+      userId: newTask.userId || null        // Use userId from newTask or fallback to current userId
     };
   
+    // Determine if the task is for a specific team or personal tasks
     if (teamIndex !== null) {
+      // Add the task to the specified team
       setTeams((prevTeams) =>
         prevTeams.map((team, index) =>
           index === teamIndex ? { ...team, tasks: [...team.tasks, taskWithId] } : team
         )
       );
     } else {
+      // Add the task to personal tasks
       setPersonalTasks((prevTasks) => [...prevTasks, taskWithId]);
     }
   };
