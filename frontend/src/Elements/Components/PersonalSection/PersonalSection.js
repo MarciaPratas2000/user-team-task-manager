@@ -11,7 +11,9 @@ const PersonalSection = ({
   onAddTask,
   onUpdateTask,
   userid,
-  onAddComment
+  onAddComment,
+  onDuplicateTask
+
 }) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
 
@@ -33,6 +35,8 @@ const PersonalSection = ({
               isPersonal={true}
               isCreator={true}
               onAddComment={onAddComment}
+              onDuplicateTask ={onDuplicateTask}             
+
             />
       
       <div className="text-center mb-3">

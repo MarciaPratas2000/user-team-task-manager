@@ -14,7 +14,7 @@ const TaskList = ({
   userid,
   isCreator,
   onAddComment,
-  isDraggable = true // Add a prop to control draggable behavior
+  onDuplicateTask
 }) => {
   return (
     <ul className="list-group">
@@ -43,6 +43,7 @@ const TaskList = ({
                 userid={userid}
                 isCreator={isCreator}
                 onAddComment={onAddComment}
+                onDuplicateTask ={onDuplicateTask}             
               />
             </li>
           )}

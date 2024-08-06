@@ -30,6 +30,7 @@ const UserPage = () => {
     handleDragEnd,
     handleAddTeam,
     handleDeleteTeam,
+    handleDuplicateTask
   } = useTaskManagement(teamsTasks, personalTasks, userid, username);
 
 
@@ -120,6 +121,8 @@ const UserPage = () => {
                       userid={userid}
                       isPersonal={true}
                       onAddComment={handleAddComment}
+                      onDuplicateTask ={handleDuplicateTask}             
+
                     />
                     {provided.placeholder}
                   </div>
@@ -166,6 +169,8 @@ const UserPage = () => {
                     isCreator={team.creatorId === userid}
                     isPersonal={false}
                     onAddComment={handleAddComment}
+                    onDuplicateTask ={handleDuplicateTask}             
+
                   />
                 ))}
               </div>

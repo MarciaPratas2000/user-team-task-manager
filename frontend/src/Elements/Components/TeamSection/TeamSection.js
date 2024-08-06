@@ -19,7 +19,8 @@ const TeamSection = ({
   userid,
   isCreator,
   isPersonal,
-  onAddComment
+  onAddComment,
+  onDuplicateTask
 }) => {
   const [showAddTaskForm, setShowAddTaskForm] = useState(false);
 
@@ -77,7 +78,10 @@ const TeamSection = ({
             }}
             userid={userid}
             isCreator={isCreator}
-            isPersonal={isPersonal}
+            isPersonal={isPersonal}     
+            //here we are only dealing with one team, so taskindex is the only argument       
+            onDuplicateTask={(taskIndex, isPersonal) => onDuplicateTask(teamIndex, taskIndex, isPersonal)} // Pass as callback
+       
           />
 
           {provided.placeholder}

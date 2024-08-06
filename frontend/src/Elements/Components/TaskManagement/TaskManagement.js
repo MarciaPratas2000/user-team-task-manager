@@ -254,7 +254,53 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
   const handleDeleteTeam = (teamIndex) => {
     setTeams((prevTeams) => prevTeams.filter((_, index) => index !== teamIndex));
   };
-
+  const handleDuplicateTask = (teamIndex, taskIndex, isPersonal = false) => {
+    // Debugging: Log the input parameters
+    console.log('handleDuplicateTask called with:', { teamIndex, taskIndex, isPersonal });
+  
+    // Function to duplicate a task within a given array of tasks
+    const duplicateTask = (tasks) => {
+      // Debugging: Log the tasks array
+      console.log('Tasks array:', tasks);
+  
+      const taskToDuplicate = tasks[taskIndex];
+      if (!taskToDuplicate) {
+        console.error('Task to duplicate is undefined');
+        return tasks;
+      }
+  
+      // Create a duplicated task with a unique ID
+      const duplicatedTask = { ...taskToDuplicate, id: createUniqueId() };
+      return [...tasks, duplicatedTask];
+    };
+  
+    if (isPersonal) {
+      // Update personal tasks if the task is personal
+      setPersonalTasks((prevTasks) => {
+        // Debugging: Log the previous personal tasks
+        console.log('Previous personal tasks:', prevTasks);
+        return duplicateTask(prevTasks);
+      });
+    } else {
+      // Update team tasks if the task belongs to a team
+      setTeams((prevTeams) => {
+        // Debugging: Log the previous teams array
+        console.log('Previous teams:', prevTeams);
+  
+        return prevTeams.map((team, index) => {
+          if (index === teamIndex) {
+            // Debugging: Log the tasks of the current team being updated
+            console.log('Updating team:', team);
+            return { ...team, tasks: duplicateTask(team.tasks) };
+          }
+          return team;
+        });
+      });
+    }
+  };
+  
+ 
+  
   return {
     teams,
     personalTasks,
@@ -267,6 +313,7 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
     handleDragEnd,
     handleAddTeam,
     handleDeleteTeam,
+    handleDuplicateTask
   };
 };
 

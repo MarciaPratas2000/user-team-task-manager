@@ -13,7 +13,8 @@ const TaskItem = ({
   onUpdateTask,
   onAddComment,
   isCreator,
-  isPersonal
+  isPersonal,
+  onDuplicateTask
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTask, setUpdatedTask] = useState(task.title);
@@ -66,9 +67,15 @@ const TaskItem = ({
     // Example transformation: Capitalize the first letter of the title
     return title.charAt(0).toUpperCase() + title.slice(1);
   };
-
+  const handleDoubleClick = () => {
+    if (isPersonal) {
+      onDuplicateTask(null,index, true); // Pass index and isPersonal
+    } else if (task.userId === userid || isCreator) {
+      onDuplicateTask(index, false); // Pass index and isPersonal
+    }
+  };
   return (
-    <div className='taskItem'>
+    <div className='taskItem' onDoubleClick={handleDoubleClick}>
       <div className={`list-group-item d-flex justify-content-between align-items-center ${getTaskClassName(task)}`}>
         <div className="d-flex align-items-center">
           <input
