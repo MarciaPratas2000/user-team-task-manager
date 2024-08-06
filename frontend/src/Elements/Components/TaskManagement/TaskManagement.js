@@ -76,8 +76,8 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
     const taskWithId = {
       ...newTask,
       id: createUniqueId(),
-      userName: newTask.userName || null, // Use userName from newTask or fallback to current username
-      userId: newTask.userId || null        // Use userId from newTask or fallback to current userId
+      userName: newTask.userName || username, // Use userName from newTask or fallback to current username
+      userId: newTask.userId || userid        // Use userId from newTask or fallback to current userId
     };
   
     // Determine if the task is for a specific team or personal tasks
