@@ -20,3 +20,9 @@
   background-color: transparent;
   
 }
+.icon-droppable-area {
+  width: 100%; /* Ensure width is sufficient */
+  height: 100px; /* Adjust height as needed */
+  overflow: visible; /* Ensure overflow is not hiding content */
+  /* Additional styles as needed */
+}

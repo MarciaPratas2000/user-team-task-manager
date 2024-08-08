@@ -12,7 +12,8 @@ const PersonalSection = ({
   onUpdateTask,
   userid,
   onAddComment,
-  onDuplicateTask
+  onDuplicateTask,
+  onIconDrop 
 
 }) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
@@ -35,7 +36,8 @@ const PersonalSection = ({
               isPersonal={true}
               isCreator={true}
               onAddComment={onAddComment}
-              onDuplicateTask ={onDuplicateTask}             
+              onDuplicateTask ={onDuplicateTask} 
+              onIconDrop ={onIconDrop }            
 
             />
       

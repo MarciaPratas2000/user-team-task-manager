@@ -302,8 +302,58 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
       });
     }
   };
+  const handleIconDrop = (icon ,iconIndex, taskIndex, isPersonal = false, teamIndex = null) => {
+    const newIcon = {
+      iconIndex,
+      iconTitle: `Icon ${iconIndex}`,
+      iconComment: `Icon ${iconIndex} dropped on task.`,
+      icon
+    };
   
- 
+    console.log('Function Handling icon drop');
+    console.log('New Icon:', newIcon);
+    console.log('Task Index:', taskIndex);
+    console.log('Is Personal:', isPersonal);
+    console.log('Team Index:', teamIndex);
+  
+    if (isPersonal) {
+      setPersonalTasks((prevTasks) => {
+        const updatedTasks = prevTasks.map((task, index) =>
+          index === taskIndex
+            ? {
+                ...task,
+                icons: [...(task.icons || []), newIcon]
+              }
+            : task
+        );
+        console.log('Updated Personal Tasks:', updatedTasks);
+        return updatedTasks;
+      });
+    } else {
+      setTeams((prevTeams) => {
+        const updatedTeams = prevTeams.map((team, index) =>
+          index === teamIndex
+            ? {
+                ...team,
+                tasks: team.tasks.map((task, tIndex) =>
+                  tIndex === taskIndex
+                    ? {
+                        ...task,
+                        icons: [...(task.icons || []), newIcon]
+                      }
+                    : task
+                )
+              }
+            : team
+        );
+        console.log('Updated Teams:', updatedTeams);
+        return updatedTeams;
+      });
+    }
+  };
+  
+  
+  
   
   return {
     teams,
@@ -317,7 +367,8 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
     handleDragEnd,
     handleAddTeam,
     handleDeleteTeam,
-    handleDuplicateTask
+    handleDuplicateTask,
+    handleIconDrop
   };
 };
 

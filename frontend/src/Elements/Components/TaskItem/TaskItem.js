@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDrop } from 'react-dnd';
 import CommentBubble from '../CommentBubble/CommentBubble';
 import './TaskItem.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,26 +15,40 @@ const TaskItem = ({
   onAddComment,
   isCreator,
   isPersonal,
-  onDuplicateTask
+  onDuplicateTask,
+  onIconDrop // Added to handle icon drop
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTask, setUpdatedTask] = useState(task.title);
 
+  // Define the drop behavior using react-dnd's useDrop hook
+  const [{ isOver }, drop] = useDrop({
+    accept: 'ICON',
+    drop: (item) => handleDrop(item), // Call handleDrop here
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  });
+
+  const handleDrop = (item) => {
+    console.log('Handle Icon Drop Triggered'); // Check if this is logged
+    console.log('Icon dropped:', item.iconIndex);
+    console.log('Task index:', index);
+    console.log('Is personal:', isPersonal);
+    onIconDrop( item.icon , item.iconIndex, index, isPersonal); // Call the function passed via props
+  };
+
   const getTaskClassName = (task) => {
     let className = '';
-
     if (task.status === 'Help') {
       className += ' help-task';
     }
-
     if (task.isUrgent) {
       className += ' urgent-task';
     }
-
     if (task.status === 'Complete' && task.isChecked) {
       className += ' completed-task-checked';
     }
-
     return className;
   };
 
@@ -62,21 +77,19 @@ const TaskItem = ({
     onUrgencyToggle(index);
   };
 
-  // Example transformation function
-  const getPlaceholderText = (title) => {
-    // Example transformation: Capitalize the first letter of the title
-    return title.charAt(0).toUpperCase() + title.slice(1);
-  };
   const handleDoubleClick = () => {
     if (isPersonal) {
-      onDuplicateTask(null,index, true); // Pass index and isPersonal
+      onDuplicateTask(null, index, true); // Pass index and isPersonal
     } else if (task.userId === userid || isCreator) {
       onDuplicateTask(index, false); // Pass index and isPersonal
     }
   };
+
   return (
     <div className='taskItem' onDoubleClick={handleDoubleClick}>
-      <div className={`list-group-item d-flex justify-content-between align-items-center ${getTaskClassName(task)}`}>
+      <div
+        className={`list-group-item d-flex justify-content-between align-items-center ${getTaskClassName(task)}`}
+      >
         <div className="d-flex align-items-center">
           <input
             className="form-check-input me-1"
@@ -91,18 +104,21 @@ const TaskItem = ({
                 className="form-control"
                 value={updatedTask}
                 onChange={(e) => setUpdatedTask(e.target.value)}
-                placeholder={getPlaceholderText(task.title)} // Set placeholder with transformation
               />
             ) : (
               task.title
             )}
           </label>
-          {!isPersonal && <span className="text-muted ms-2">{task.userName}, ID: {task.userId}</span>}
+          {!isPersonal && (
+            <span className="text-muted ms-2">
+              {task.userName}, ID: {task.userId}
+            </span>
+          )}
         </div>
 
         <div className="d-flex align-items-center">
           <button
-            className={`btn ${isEditing ? 'btn-save' : 'btn-edit'} ms-2`} 
+            className={`btn ${isEditing ? 'btn-save' : 'btn-edit'} ms-2`}
             onClick={isEditing ? handleSave : handleEdit}
             disabled={!isCreator && userid !== task.userId}
             aria-label={isEditing ? 'Save task' : 'Edit task'}
@@ -110,8 +126,8 @@ const TaskItem = ({
             <FontAwesomeIcon icon={isEditing ? faCheck : faPencilAlt} />
           </button>
           {isEditing && (
-            <button 
-              className="btn btn-cancel ms-2" 
+            <button
+              className="btn btn-cancel ms-2"
               onClick={handleCancel}
               aria-label="Cancel edit"
             >
@@ -150,6 +166,26 @@ const TaskItem = ({
           existingComments={task.comments || []}
         />
       )}
+
+      <div
+        ref={drop}
+        className={`icon-droppable-area border ${isOver ? 'highlight' : ''}`}
+      >
+        <p>Drop icons here</p>
+        {/* Render icons here */}
+        
+        
+        {task.icons && task.icons.length > 0 && (
+    <div className="icons-container">
+      {task.icons.map((icon, idx) => (
+        <div key={idx} className="icon">
+          <FontAwesomeIcon icon={icon.icon} className="icon-image" />
+        </div>
+      ))}
+          </div>
+  )}
+        
+      </div>
     </div>
   );
 };

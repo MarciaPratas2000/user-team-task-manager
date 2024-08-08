@@ -3,7 +3,7 @@
 .user-dashboard {
   background: #e9ecef; /* Light background color for dashboard */
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   min-height: 100vh; /* Ensure it covers the full height of the viewport */
 }

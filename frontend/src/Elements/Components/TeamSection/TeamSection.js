@@ -20,7 +20,8 @@ const TeamSection = ({
   isCreator,
   isPersonal,
   onAddComment,
-  onDuplicateTask
+  onDuplicateTask,
+  onIconDrop
 }) => {
   const [showAddTaskForm, setShowAddTaskForm] = useState(false);
 
@@ -61,6 +62,7 @@ const TeamSection = ({
             onCheckboxChange={(taskIndex) => onCheckboxChange(teamIndex, taskIndex)}
             onStatusChange={(taskIndex, newStatus) => onStatusChange(teamIndex, taskIndex, newStatus)}
             onUrgencyToggle={(taskIndex) => onUrgencyToggle(teamIndex, taskIndex)}
+            onIconDrop={(icon ,iconIndex, taskIndex, isPersonal) => onIconDrop(icon, iconIndex, taskIndex, isPersonal, teamIndex)}
             onDeleteTask={(taskIndex) => {
               const task = team.tasks[taskIndex];
               if (task.userId === userid || isCreator) {

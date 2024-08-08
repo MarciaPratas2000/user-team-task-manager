@@ -14,8 +14,11 @@ const TaskList = ({
   userid,
   isCreator,
   onAddComment,
-  onDuplicateTask
+  onDuplicateTask,
+  onIconDrop
 }) => {
+
+  
   return (
     <ul className="list-group">
       {tasks.map((task, index) => (
@@ -43,7 +46,9 @@ const TaskList = ({
                 userid={userid}
                 isCreator={isCreator}
                 onAddComment={onAddComment}
-                onDuplicateTask ={onDuplicateTask}             
+                onDuplicateTask ={onDuplicateTask}  
+                onIconDrop={onIconDrop } // Use no-op if onIconDrop is not provided
+          
               />
             </li>
           )}

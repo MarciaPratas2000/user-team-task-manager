@@ -1,0 +1,35 @@
+/* toolbox.css */
+.toolbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+  }
+  
+  .toolbox-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60px; /* Adjust the height as needed */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .toolbox-item:hover {
+    background-color: #e6e6e6;
+  }
+  
+  .toolbox-item .text-danger {
+    font-size: 24px; /* Adjust icon size as needed */
+  }
+  

@@ -8,7 +8,9 @@ const personalTasks = [
       isUrgent: false,
       userName: 'kate',
       userId: '0001',
-      comments: []
+      comments: [],
+      icons :[]
+
     },
     {
       id: 'task-5',
@@ -19,7 +21,9 @@ const personalTasks = [
       isUrgent: true,
       userName: 'kate',
       userId: '0001',
-      comments: []
+      comments: [],
+      icons :[]
+
     }
   ];
   

@@ -13,7 +13,9 @@ const teamsTasks = [
           isUrgent: false,
           userName: 'Alice',
           userId: '0002',
-          comments: []
+          comments: [],
+          icons :[]
+          
         },
         {
           id: 'task-2',
@@ -24,7 +26,9 @@ const teamsTasks = [
           isUrgent: false,
           userName: 'Bob',
           userId: '0003',
-          comments: []
+          comments: [],
+          icons :[]
+
         }
       ]
     },
@@ -42,7 +46,9 @@ const teamsTasks = [
           isUrgent: true,
           userName: 'Bob',
           userId: '0003',
-          comments: []
+          comments: [],
+          icons :[]
+
         }
       ]
     }
