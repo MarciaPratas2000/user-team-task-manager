@@ -1,28 +1,113 @@
 /* src/components/TaskItem/TaskItem.css */
 
+:root {
+  --highlight-color: #007bff;
+  --urgent-bg-color: lightcoral;
+  --help-bg-color: lightyellow;
+  --completed-color: #6c757d;
+  --icon-size: 14px; /* Adjusted to a more standard size */
+  --border-color: #ccc;
+  --background-color: #f9f9f9;
+}
+
+/* Task types */
 .help-task {
-  background-color: lightyellow; /* Light yellow for Help tasks */
+  background-color: var(--help-bg-color);
 }
 
 .urgent-task {
-  background-color: lightcoral; /* Light coral for urgent tasks */
+  background-color: var(--urgent-bg-color);
 }
 
 .completed-task-checked {
-  color: #6c757d; /* Muted color for completed tasks */
+  color: var(--completed-color);
 }
 
 .eliminating-task {
-  opacity: 0.5; /* Dimmed appearance for eliminating tasks (if you use this class) */
+  opacity: 0.5;
 }
 
-.taskItem .btn-edit {
-  background-color: transparent;
-  
+/* Button and CommentBubble styling */
+.icon-container {
+  display: flex;
+  align-items: center;
 }
+
+.icon-functions-container {
+  display: flex;
+  flex-direction: row; /* Ensure horizontal alignment of buttons */
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon-functions-container div {
+  margin: 0 5px;
+}
+
+.icon-button, .icon-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--icon-color, #007bff);
+  font-size: var(--icon-size);
+}
+
+/* Comment bubble styling */
+.icon-comment-bubble {
+  display: inline-flex; /* Use inline-flex to ensure it respects alignment */
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  font-size: var(--icon-size);
+}
+
+/* Icon droppable area styling */
 .icon-droppable-area {
-  width: 100%; /* Ensure width is sufficient */
-  height: 100px; /* Adjust height as needed */
-  overflow: visible; /* Ensure overflow is not hiding content */
-  /* Additional styles as needed */
+  border: 1px dashed var(--border-color);
+  padding: 10px;
+  border-radius: 5px;
+  background-color: var(--background-color);
+  margin-top: 10px;
+  width: 100%;
+  min-height: 50px;
+}
+
+.icon-droppable-area.highlight {
+  border-color: var(--highlight-color);
+}
+
+.icons-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap if they overflow */
+  gap: 10px; /* Space between icons */
+  justify-content: flex-start; /* Adjust to your preference */
+  align-items: center; /* Ensure vertical alignment */
+  margin: 0;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.icon-image {
+  font-size: var(--icon-size);
+  margin: 5px;
+
+}
+
+.icon-comment-bubble {
+  font-size: var(--icon-size);
+  margin: 0 auto ;
+  padding: 0 px;
+}
+
+.icon-button {
+  font-size: var(--icon-size);
+  border: none;
+  background: none; /* Remove default button styles */
+  margin: 0 auto ;
+
 }

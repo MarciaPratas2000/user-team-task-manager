@@ -3,7 +3,8 @@ import { useDrop } from 'react-dnd';
 import CommentBubble from '../CommentBubble/CommentBubble';
 import './TaskItem.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faPencilAlt, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+
 
 const TaskItem = ({
   userid,
@@ -16,26 +17,26 @@ const TaskItem = ({
   isCreator,
   isPersonal,
   onDuplicateTask,
-  onIconDrop // Added to handle icon drop
+  onIconDrop
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTask, setUpdatedTask] = useState(task.title);
 
-  // Define the drop behavior using react-dnd's useDrop hook
   const [{ isOver }, drop] = useDrop({
     accept: 'ICON',
-    drop: (item) => handleDrop(item), // Call handleDrop here
+    drop: (item) => handleDrop(item),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   });
 
   const handleDrop = (item) => {
-    console.log('Handle Icon Drop Triggered'); // Check if this is logged
-    console.log('Icon dropped:', item.iconIndex);
-    console.log('Task index:', index);
-    console.log('Is personal:', isPersonal);
-    onIconDrop( item.icon , item.iconIndex, index, isPersonal); // Call the function passed via props
+    onIconDrop(item.icon, item.iconIndex, index, isPersonal);
+  };
+
+  const handleIconRemove = (iconIndex) => {
+    const updatedIcons = task.icons.filter(icon => icon.iconIndex !== iconIndex);
+    onUpdateTask(index, { icons: updatedIcons });
   };
 
   const getTaskClassName = (task) => {
@@ -79,9 +80,9 @@ const TaskItem = ({
 
   const handleDoubleClick = () => {
     if (isPersonal) {
-      onDuplicateTask(null, index, true); // Pass index and isPersonal
+      onDuplicateTask(null, index, true);
     } else if (task.userId === userid || isCreator) {
-      onDuplicateTask(index, false); // Pass index and isPersonal
+      onDuplicateTask(index, false);
     }
   };
 
@@ -162,7 +163,7 @@ const TaskItem = ({
 
       {(isCreator || userid === task.userId) && (
         <CommentBubble
-          onSave={(comment) => onAddComment(index, comment)}
+          onSave={(comment) => onAddComment(index, comment, isPersonal, null)}
           existingComments={task.comments || []}
         />
       )}
@@ -172,22 +173,37 @@ const TaskItem = ({
         className={`icon-droppable-area border ${isOver ? 'highlight' : ''}`}
       >
         <p>Drop icons here</p>
-        {/* Render icons here */}
-        
-        
         {task.icons && task.icons.length > 0 && (
-    <div className="icons-container">
-      {task.icons.map((icon, idx) => (
-        <div key={idx} className="icon">
-          <FontAwesomeIcon icon={icon.icon} className="icon-image" />
-        </div>
-      ))}
+          <div className="icons-container container-fluid">
+            {task.icons.map((icon, idx) => (
+              
+              <div key={idx} className="icon d-flex col border">
+                <FontAwesomeIcon icon={icon.icon} />
+                
+                <div>{icon.iconTitle}</div> {/* Display icon title */}
+                <div className="icon-functions-container border border-info">
+                  <CommentBubble
+                    onSave={(comment) => {
+                      console.log(`Adding comment for icon at index ${idx}:`, comment);
+                      onAddComment(index, comment, isPersonal, icon.iconIndex);
+                    }}
+                    existingComments={Array.isArray(icon.comments) ? icon.comments : []}
+                  />
+                  <button
+                    onClick={() => handleIconRemove(icon.iconIndex)}
+                    className="icon-button"
+                    title="Remove icon"
+                  >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-  )}
-        
+        )}
       </div>
     </div>
   );
 };
 
-export default TaskItem;
+export default TaskItem

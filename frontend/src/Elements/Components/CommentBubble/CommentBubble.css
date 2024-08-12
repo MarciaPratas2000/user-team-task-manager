@@ -10,7 +10,7 @@
   color: grey;
   border: none;
   border-radius: 15px;
-  padding: 10px;
+  margin: 10px;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s, transform 0.3s;
@@ -28,8 +28,7 @@
   border-radius: 10px;
   padding: 10px;
   width: 100%; /* Full width */
-  z-index: 4;
-  
+  z-index: 4;  
   box-sizing: border-box; /* Include padding in width calculation */
 }
 .comment-bubble

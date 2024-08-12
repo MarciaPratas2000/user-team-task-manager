@@ -109,24 +109,49 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
       );
     }
   };
-
-  const handleAddComment = (teamIndex, taskIndex, comment, isPersonal) => {
-    const addComment = (tasks) =>
-      tasks.map((task, index) =>
-        index === taskIndex ? { ...task, comments: [...(task.comments || []), comment] } : task
-      );
-
+  const handleAddComment = (teamIndex, taskIndex, comment, isPersonal, iconIndex = null) => {
+    // Helper function to add a comment to a specific task or icon within the task
+    const addCommentToTask = (tasks) =>
+      tasks.map((task, index) => {
+        if (index === taskIndex) {
+          if (iconIndex === null) {
+            // Add comment to the task itself
+            return {
+              ...task,
+              comments: [...(task.comments || []), comment]
+            };
+          } else {
+            // Add comment to a specific icon within the task
+            return {
+              ...task,
+              icons: task.icons.map((icon, idx) =>
+                idx === iconIndex
+                  ? { ...icon, comments: [...(icon.comments || []), comment] }
+                  : icon
+              )
+            };
+          }
+        }
+        return task;
+      });
+  
     if (isPersonal) {
-      setPersonalTasks(addComment);
+      // Update personal tasks with the new comment
+      setPersonalTasks((prevPersonalTasks) => addCommentToTask(prevPersonalTasks));
     } else {
+      // Update team tasks with the new comment
       setTeams((prevTeams) =>
         prevTeams.map((team, index) =>
-          index === teamIndex ? { ...team, tasks: addComment(team.tasks) } : team
+          index === teamIndex
+            ? { ...team, tasks: addCommentToTask(team.tasks) } // Add comment to the task within the team
+            : team
         )
       );
     }
   };
-
+  
+  
+  
   const handleDragEnd = (result) => {
     const { source, destination } = result;
 
@@ -302,19 +327,20 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
       });
     }
   };
-  const handleIconDrop = (icon ,iconIndex, taskIndex, isPersonal = false, teamIndex = null) => {
+  const handleIconDrop = (icon, iconIndex, taskIndex, isPersonal = false, teamIndex = null) => {
+    console.log(`Handling icon drop...`);
+    console.log(`Icon:`, icon);
+    console.log(`Icon Index:`, iconIndex);
+    console.log(`Task Index:`, taskIndex);
+    console.log(`Is Personal:`, isPersonal);
+    console.log(`Team Index:`, teamIndex);
+  
     const newIcon = {
       iconIndex,
       iconTitle: `Icon ${iconIndex}`,
-      iconComment: `Icon ${iconIndex} dropped on task.`,
+      comments: [],
       icon
     };
-  
-    console.log('Function Handling icon drop');
-    console.log('New Icon:', newIcon);
-    console.log('Task Index:', taskIndex);
-    console.log('Is Personal:', isPersonal);
-    console.log('Team Index:', teamIndex);
   
     if (isPersonal) {
       setPersonalTasks((prevTasks) => {
@@ -351,6 +377,8 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
       });
     }
   };
+  
+  
   
   
   

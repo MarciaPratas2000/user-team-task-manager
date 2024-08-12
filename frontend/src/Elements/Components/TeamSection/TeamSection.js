@@ -75,10 +75,10 @@ const TeamSection = ({
                 onUpdateTask(taskIndex, updatedTask);
               }
             }}
-            onAddComment={(taskIndex, comment) => {
+            onAddComment={(taskIndex, comment,isPersonal, iconIndex) => {
               const task = team.tasks[taskIndex];
               if (task.userId === userid || isCreator) {
-                onAddComment(teamIndex, taskIndex, comment);
+                onAddComment(teamIndex, taskIndex, comment, isPersonal,iconIndex);
               }
             }}
             userid={userid}

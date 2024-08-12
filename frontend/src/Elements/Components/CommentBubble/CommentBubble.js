@@ -54,7 +54,7 @@ const CommentBubble = ({ onSave, existingComments, onRemove }) => {
   };
 
   return (
-    <div className="comment-bubble mt-0 mb-4">
+    <div className="comment-bubble mt-0">
       <button
         className="comment-bubble-button"
         onClick={toggleBubble}
