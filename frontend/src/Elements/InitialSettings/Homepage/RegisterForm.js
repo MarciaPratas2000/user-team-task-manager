@@ -27,8 +27,11 @@ export default function RegisterForm({ onSubmit, goBack }) {
 
   
   return (
+    <div className="d-flex justify-content-center align-items-center container shadow-none ">
+      <div className="w-75">
+      <h1 className="text-center mb-4">Register here!</h1>
     <form onSubmit={handleSubmit}>
-      <div className="mb-3">
+      <div className="mb-3 ">
         <label htmlFor="register-username" className="form-label">Username</label>
         <input
           type="text"
@@ -52,8 +55,14 @@ export default function RegisterForm({ onSubmit, goBack }) {
           required
         />
       </div>
-      <button type="submit" className="btn btn-primary w-75 mb-3">Register</button>
-      <button type="button" className="btn btn-secondary w-75 mb-3" onClick={goBack}>Go Back</button>
-    </form>
+      <div className=" row justify-content-center">
+            <button type="submit" className="btn btn-register m-3 col-md-4">Login</button>
+            <div></div>
+            <button type="button" className="btn btn-back  mb-3 col-md-4" onClick={goBack}>Go Back</button>
+          </div>    
+     </form>
+</div>
+</div>
+
   );
 }

@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm'; // Ensure the path is correct
 import RegisterForm from './RegisterForm'; // Ensure the path is correct
 import './Homepage.css'; // Ensure the CSS path is correct
+import AppDescription from '../AppDescription/AppDescription'; // Ensure the path is correct
 
 export default function Homepage() {
   const [showFormLogin, setShowFormLogin] = useState(false);
   const [showFormRegister, setShowFormRegister] = useState(false);
+  const [showAppDescription, setShowAppDescription] = useState(false); // State to control AppDescription
 
   const [loginData, setLoginData] = useState({ username: '', userid: '', password: '' });
   const [registerData, setRegisterData] = useState({ username: '', password: '' });
@@ -16,11 +18,19 @@ export default function Homepage() {
   const handleLoginClick = () => {
     setShowFormLogin(true);
     setShowFormRegister(false);
+    setShowAppDescription(false); // Hide AppDescription when login form is shown
   };
 
   const handleRegisterClick = () => {
     setShowFormRegister(true);
     setShowFormLogin(false);
+    setShowAppDescription(false); // Hide AppDescription when register form is shown
+  };
+
+  const handleAppDescription = () => {
+    setShowAppDescription(!showAppDescription); // Toggle AppDescription visibility
+    setShowFormLogin(false);
+    setShowFormRegister(false);
   };
 
   const handleInputChange = (event) => {
@@ -30,6 +40,11 @@ export default function Homepage() {
     } else if (showFormLogin) {
       setLoginData(prevData => ({ ...prevData, [name]: value }));
     }
+  };
+  const handleHomeClick = () => {
+    setShowFormLogin(false);
+    setShowFormRegister(false);
+    setShowAppDescription(false);
   };
 
   const handleLoginSubmit = (event) => {
@@ -48,54 +63,65 @@ export default function Homepage() {
   const handleGoBack = () => {
     setShowFormLogin(false);
     setShowFormRegister(false);
+    setShowAppDescription(true); // Show AppDescription when forms are hidden
   };
 
   return (
-    <div className="Homepage">
-      <div className="container mt-5">
-        <h1 className="text-center mb-4">TaskMingle App</h1>
-        <div className="row justify-content-center">
-          <div className="col-12 col-md-8 col-lg-6">
-            <div className="card mb-3">
-              <div className="card-body">
-                {!showFormLogin && !showFormRegister ? (
+    <div>
+      <nav className="navbar navbar-expand-lg navbar-light ">
+        <button className="navbar-brand" href="#">logotipo</button>
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item active">
+              <button className="nav-link" href="./" onClick={handleHomeClick}>Home</button>
+            </li>
+            <li className="nav-item">
+              <button className="nav-link" onClick={handleAppDescription}>About TaskTiles</button>
+            </li>
+            <li className="nav-item">
+              <button className="nav-link"  onClick={handleLoginClick}>Login</button>
+            </li>
+            <li className="nav-item">
+              <button className="nav-link"  onClick={handleRegisterClick}>Register</button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div className="Homepage">
+        <div className="container mt-5">
+          <div className="row justify-content-center">
+            <div className="card shadow-none mb-3">
+              <div>
+                {showAppDescription && (
+                  <AppDescription />
+                )}
+                {!showFormLogin && !showFormRegister && !showAppDescription && (
                   <>
-                    <div>
-                      <ul className="list-group app-description text-muted mb-4">
-                        <li className="list-group-item">
-                          <span className="icon">✔️</span> Welcome to the best interactive task manager app!
-                        </li>
-                        <li className="list-group-item">
-                          <span className="icon">🔧</span> Built with Node.js and React, it streamlines task management for both individuals and teams.
-                        </li>
-                        <li className="list-group-item">
-                          <span className="icon">🗂️</span> Each user has a personalized space to add, view, and delete tasks, while teams share a workspace to collaborate on goals.
-                        </li>
-                        <li className="list-group-item">
-                          <span className="icon">🌟</span> Our vision is a seamless experience with easy authentication and an intuitive interface.
-                        </li>
-                        <li className="list-group-item">
-                          <span className="icon">🚀</span> <strong>Join us now</strong> and transform how you manage tasks and collaborate with your team!
-                        </li>
-                      </ul>
-                    </div>
                     <div className="d-flex flex-column align-items-center">
-                      <button className="btn btn-primary w-75 mb-3" onClick={handleLoginClick}>
+                      <h1>TaskTiles App</h1>
+                      <h3 className='text-muted m-2'> 👋 Welcome to your task and team management app</h3>
+                      <button className="btn btn-login w-25 mt-3  mb-3" onClick={handleLoginClick}>
                         Login
                       </button>
-                      <button className="btn btn-secondary w-75 mb-3" onClick={handleRegisterClick}>
+                      <button className="btn border btn-register w-25  mb-3" onClick={handleRegisterClick}>
                         Register
                       </button>
                     </div>
                   </>
-                ) : showFormRegister ? (
+                )}
+                {showFormRegister && (
                   <RegisterForm
                     registerData={registerData}
                     onInputChange={handleInputChange}
                     onSubmit={handleRegisterSubmit}
                     goBack={handleGoBack}
                   />
-                ) : (
+                )}
+                {showFormLogin && (
                   <LoginForm
                     loginData={loginData}
                     onInputChange={handleInputChange}

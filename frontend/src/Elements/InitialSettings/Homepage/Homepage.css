@@ -1,95 +1,169 @@
 /* src/Homepage.css */
 
+/* General Styles */
 .Homepage {
-    background: linear-gradient(to bottom, #76BBE2, #f8ecf9); /* Gradient from sky blue to light pink */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Full height for vertical centering */
-  }
-  
-  
-  
-  .card {
-    border: none;
-    border-radius: 20px; /* Softly rounded corners */
-    background: #ffffff; /* Clean white background for the card */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Gentle shadow for the card */
-    width: 100%; /* Full width of its container */
-    max-width: 700px; /* Limit maximum width */
-  }
-  
-  .card-body {
-    padding: 0 0.5rem; /* Adjust padding for better spacing */
-  }
-  
-  h1 {
-    color: #0E4B6D; /* Deep navy blue for the header */
-    font-size: 2.5rem; /* Larger font size for emphasis */
-    margin: 0.5rem 0; /* Space below the header */
-  }
-  
-  .btn-primary, .btn-secondary {
-    border-radius: 8px; /* Softly rounded corners */
-    font-size: 16px; /* Slightly larger font size */
-    font-weight: 600; /* Bold font for emphasis */
-    transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition for hover effect */
-    border: 1px solid #44535c; /* Remove default border */
-  }
-  
-  .btn-primary {
-    background-color: #bad3e1; /* Soft sky blue */
-  }
-  
-  .btn-primary:hover {
-    background-color: #90c7f7; /* Slightly darker sky blue */
-  }
-  
-  .btn-secondary {
-    background-color: rgb(177, 215, 241); /* Light sky blue */
-  }
-  
-  .btn-secondary:hover {
-    background-color: #6ebada; /* Slightly darker light blue */
-  }
-  
-  .input-group {
-    margin-bottom: 1.5rem; /* Increased spacing for input groups */
-  }
-  
-  .input-group .form-control {
-    border-radius: 10px; /* Softly rounded corners for input fields */
-    border: 1px solid #ddd; /* Light border color */
-    padding: 10px; /* Padding inside input fields */
-  }
-  
-  .form-label {
-    font-weight: 500;
-    color: #0E4B6D; /* Deep navy blue for labels */
-  }
-  
-  .mb-3 {
-    margin-bottom: 1.5rem; /* Space below elements with mb-3 class */
-  }
-  
-  .app-description {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .list-group-item {
-    display: flex; /* Flexbox for alignment */
-    justify-content: center;
-    align-items: center; /* Center align items vertically */
-    border: none; /* Remove default border */
-    border-radius: 8px; /* Softly rounded corners */
-    color: #333; /* Dark text color for readability */
-    text-align: center;
-  }
-  
-  .icon {
-    font-size: 1.2rem; /* Adjust icon size */
-    margin-right: 0.5rem; /* Space between icon and text */
-  }
-  
+  background-color: #DFF5E1; /* Light mint green background */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Arial', sans-serif; /* Clean, readable font */
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #fdfaff; /* White background for navbar */
+  border-bottom: 1px solid #ffffff; /* Light grey border for subtle separation */
+  padding: 1rem 2rem;
+}
+
+.navbar-brand {
+  font-size: 2rem; /* Larger font size for prominence */
+  color: #003366; /* Navy blue */
+  font-weight: 700; /* Bold font weight */
+}
+
+.navbar-toggler {
+  border: none;
+  background: #003366; /* Navy blue background for the toggler */
+  color: #FFFFFF; /* White icon color */
+}
+
+.navbar-toggler-icon {
+  background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>');
+}
+
+.navbar-nav .nav-link {
+  color: #003366; /* Navy blue for nav links */
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  margin: auto;
+  border-radius: 8px; /* Rounded corners on hover */
+
+}
+
+.navbar-nav .nav-link:hover {
+  color: #FFFFFF; /* White on hover */
+  background-color: #003366; /* Navy blue background on hover */
+  border-radius: 8px; /* Rounded corners on hover */
+}
+
+/* Card Styles */
+.card-body {
+  padding: 2rem;
+  background: #FFFFFF; /* White background for card */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Enhanced shadow for a floating effect */
+  border: 1px solid #E1E5EA; /* Light grey border */
+}
+
+/* Heading Styles */
+h1 {
+  color: #003366; /* Navy blue for headings */
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 700; /* Bold font weight */
+
+}
+/* Button Styles */
+.btn {
+  border-radius: 12px; /* Soft rounded corners */
+  font-size: 16px;
+  font-weight: 500; /* Medium font weight */
+  padding: 0.75rem 1.5rem;
+  border: none; /* Remove default border */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+}
+
+.btn-login {
+  background-color: #003366; /* Navy blue */
+  color: #FFFFFF; /* White text */
+}
+
+.btn-login:hover {
+  background-color: #00274D; /* Slightly darker navy blue */
+  transform: translateY(-2px); /* Subtle lift effect */
+}
+
+.btn-register{
+  background-color: #DFF5E1; /* Light mint green */
+  color: #003366; /* Navy blue text */
+}
+
+.btn-register:hover {
+  background-color: #CFE8D0; /* Slightly darker mint green */
+  transform: translateY(-2px); /* Subtle lift effect */
+}
+
+/* Input Styles */
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group .form-control {
+  border-radius: 8px; /* Softly rounded corners */
+  border: 1px solid #E0E0E0; /* Light grey border */
+  padding: 0.75rem;
+  font-size: 16px;
+}
+
+/* Form Label Styles */
+.form-label {
+  font-weight: 500;
+  color: #003366; /* Navy blue for labels */
+}
+
+/* Additional Spacing */
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
+
+/* List Group Item Styles */
+.list-group-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 8px;
+  background: #FFFFFF; /* White background */
+  color: #757575; /* Soft grey text color */
+  text-align: center;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Icon Styles */
+.icon {
+  font-size: 1.5rem; /* Larger icon size */
+  margin-right: 0.5rem;
+}
+
+.btn-back {
+  background-color: #68819a; /* Navy blue background */
+  color: #FFFFFF; /* White text */
+  border-radius: 12px; /* Soft rounded corners */
+  font-size: 16px;
+  font-weight: 500; /* Medium font weight */
+  padding: 0.75rem 1.5rem;
+  border: none; /* Remove default border */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+  display: inline-flex;
+  align-items: center; /* Vertically center icon and text */
+}
+
+.btn-back:hover {
+  background-color: #313f4c; /* Slightly darker navy blue */
+  transform: translateY(-2px); /* Subtle lift effect */
+  color: #FFFFFF; /* White text */
+
+}
+
+.btn-back .icon {
+  margin-right: 0.5rem; /* Space between icon and text */
+  font-size: 1.2rem; /* Adjust icon size if needed*/
+}
