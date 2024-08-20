@@ -18,10 +18,11 @@ const TaskList = ({
   isCreator,
   onAddComment,
   onDuplicateTask,
-  onIconDrop
+  onIconDrop,
 }) => {
   // State to manage visibility of Toolbox for each task
   const [visibleToolboxes, setVisibleToolboxes] = useState({});
+
 
   // Toggle visibility of the toolbox for a specific task
   const toggleToolbox = (taskIndex) => {
@@ -29,6 +30,7 @@ const TaskList = ({
       ...prevState,
       [taskIndex]: !prevState[taskIndex],
     }));
+    console.log(visibleToolboxes)
   };
 
   return (
@@ -59,19 +61,24 @@ const TaskList = ({
                   isCreator={isCreator}
                   onAddComment={onAddComment}
                   onDuplicateTask={onDuplicateTask}
-                  onIconDrop={onIconDrop} // Use no-op if onIconDrop is not provided
+                  onIconDrop={onIconDrop}
+                  visibleToolboxes ={visibleToolboxes[index]} // Use no-op if onIconDrop is not provided
                 />
               </li>
             )}
           </Draggable>
-          <button
-            className="btn text-dark border-none mt-2"
-            onClick={() => toggleToolbox(index)}
-            aria-label="Toggle Toolbox"
-          >
-            <FontAwesomeIcon icon={faToolbox} size="sm" />
-          </button>
-          {visibleToolboxes[index] && <Toolbox />}
+          {!isPersonal  && (
+            <div className="mt-2">
+              <button
+                className="btn text-dark border-none"
+                onClick={() => toggleToolbox(index)}
+                aria-label="Toggle Toolbox"
+              >
+                <FontAwesomeIcon icon={faToolbox} size="sm" />
+              </button>
+              {visibleToolboxes[index] && <Toolbox />}
+            </div>
+          )}
         </React.Fragment>
       ))}
     </ul>

@@ -17,7 +17,8 @@ const TaskItem = ({
   isCreator,
   isPersonal,
   onDuplicateTask,
-  onIconDrop
+  onIconDrop,
+  visibleToolboxes
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTask, setUpdatedTask] = useState(task.title);
@@ -167,7 +168,7 @@ const TaskItem = ({
           existingComments={task.comments || []}
         />
       )}
-
+      {!isPersonal  &&  visibleToolboxes && (
       <div
         ref={drop}
         className={`icon-droppable-area border ${isOver ? 'highlight' : ''}`}
@@ -178,9 +179,9 @@ const TaskItem = ({
             {task.icons.map((icon, idx) => (
               
               <div key={idx} className="icon d-flex col border">
-                <FontAwesomeIcon icon={icon.icon} />
+                <FontAwesomeIcon icon={icon.icon}  size="sm"/>
                 
-                <div>{icon.iconTitle}</div> {/* Display icon title */}
+                <div className='fs-6 p-2'>User: {icon.iconUsername}, ID:{icon.iconUser}</div> 
                 <div className="icon-functions-container border border-info">
                   <CommentBubble
                     onSave={(comment) => {
@@ -202,7 +203,9 @@ const TaskItem = ({
           </div>
         )}
       </div>
+      )}
     </div>
+      
   );
 };
 

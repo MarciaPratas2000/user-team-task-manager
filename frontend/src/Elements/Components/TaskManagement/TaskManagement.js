@@ -338,7 +338,9 @@ const useTaskManagement = (initialTeams, initialPersonalTasks, userid, username)
     const newIcon = {
       iconIndex,
       iconTitle: `Icon ${iconIndex}`,
-      comments: [],
+      iconUser: userid,
+      iconUsername: username,
+      comments: [],    
       icon
     };
   

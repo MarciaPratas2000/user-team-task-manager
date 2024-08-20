@@ -1,24 +1,22 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationCircle, faUserGear, faSquarePersonConfined } from '@fortawesome/free-solid-svg-icons';
+import { faHand, faHandshake, faGear } from '@fortawesome/free-solid-svg-icons'; // Import new icons
 import { useDrag } from 'react-dnd';
 import './toolbox.css';
 
-const Toolbox = () => {
-  // Array of icons with their respective indices
-  const icons = [
-    { icon: faExclamationCircle, index: 1 },
-    { icon: faUserGear, index: 2 },
-    { icon: faSquarePersonConfined, index: 3 },
-    { icon: faUserGear, index: 4 }, // Duplicate with a different index
-    { icon: faSquarePersonConfined, index: 5 } // Duplicate with a different index
-  ];
+// Updated icons array with titles and new icons
+const icons = [
+  { icon: faHand, index: 1, title: 'Available to Help' },
+  { icon: faHandshake, index: 2, title: 'Collaborating' },
+  { icon: faGear, index: 3, title: 'Work Interference' }
+];
 
+const Toolbox = () => {
   return (
     <div className="toolbox container">
       <div className="row">
-        {icons.map(({ icon, index }) => (
-          <ToolboxItem icon={icon} iconIndex={index} key={`icon-${index}`} />
+        {icons.map(({ icon, index, title }) => (
+          <ToolboxItem icon={icon} iconIndex={title} index={index} title={title} key={`icon-${index}`} />
         ))}
       </div>
     </div>
@@ -27,7 +25,7 @@ const Toolbox = () => {
 
 const isValidIcon = (icon) => typeof icon === 'object' && icon.icon;
 
-const ToolboxItem = ({ icon, iconIndex }) => {
+const ToolboxItem = ({ icon, iconIndex, title }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'ICON',
     item: { icon, iconIndex },
@@ -41,9 +39,13 @@ const ToolboxItem = ({ icon, iconIndex }) => {
       ref={drag}
       className={`col-6 col-md-4 col-lg-3 mb-2 toolbox-item ${isDragging ? 'dragging' : ''}`}
       style={{ opacity: isDragging ? 0.5 : 1 }}
+      title={title} // Add title as a tooltip
     >
       {isValidIcon(icon) ? (
-        <FontAwesomeIcon icon={icon} className="text-danger" />
+        <>
+          <FontAwesomeIcon icon={icon} className="text-danger"  size="sm"/>
+          <div className="toolbox-item-title">{title}</div> {/* Display the title */}
+        </>
       ) : (
         <div>Invalid icon</div>
       )}
