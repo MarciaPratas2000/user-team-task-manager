@@ -95,7 +95,9 @@ const UserPage = () => {
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="row">
           <div className="col-md-6">
-            <div className="card personal-section">
+            <div className="card ">
+            <div className="card-header">Personal Tasks</div>
+
             <Droppable droppableId="personalTasks" type="TASK" direction='vertical' >
                 {(provided) => (
                   <div
@@ -103,7 +105,6 @@ const UserPage = () => {
                     {...provided.droppableProps}
                     className="card-body"
                   >
-                    <div className="card-header">Personal Tasks</div>
                     <PersonalSection
                       personalTasks={managedPersonalTasks}
                       onCheckboxChange={(taskIndex) =>
@@ -138,7 +139,7 @@ const UserPage = () => {
               <div className="card-header">Team Tasks</div>
               <div className="d-flex justify-content-end mt-4 me-4">
                 <button
-                  className="btn btn-secondary rounded"
+                  className="btn btn-board"
                   onClick={() => setIsCreatingTeam(true)}
                 >
                   Create New Team
@@ -153,7 +154,7 @@ const UserPage = () => {
                   />
                 </div>
               )}
-              <div className="card-body">
+              <div className="card-body ">
                 
                 {teams.map((team, teamIndex) => (
                   <TeamSection
@@ -185,7 +186,7 @@ const UserPage = () => {
       </DragDropContext>
       <div className="d-flex justify-content-end mt-4">
         <button
-          className="btn btn-secondary rounded"
+          className="btn btn-board rounded"
           onClick={() => navigate('/')}
         >
           Go Back

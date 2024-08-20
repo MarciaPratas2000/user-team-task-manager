@@ -1,6 +1,6 @@
 
 .team-section {
-  background-color: #ffffff; /* White background for the section */
+  background-color: #f0eee4; /* White background for the section */
   padding: 20px; /* Padding inside the section */
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
@@ -12,14 +12,14 @@
   color: #343a40; /* Dark color for the heading */
 }
 
-.team-section .btn-primary {
-  background-color: #007bff; /* Primary button color */
-  border: none; /* Remove default border */
-  color: #fff; /* White text */
+.team-section .btn-board{
+  background-color: #9c856a; /* Primary button color */
+  margin: 10px 0 0 0;
+  border: 1px solid #e7c6c0
 }
 
-.team-section .btn-primary:hover {
-  background-color: #0056b3; /* Darker shade on hover */
+.team-section .btn-board :hover {
+  background-color: #9c9287; /* Darker shade on hover */
 }
 
 .text-center {
